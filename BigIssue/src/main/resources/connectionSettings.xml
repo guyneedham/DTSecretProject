@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<connection>
+	<database id="MySQL">
+		<url>jdbc:mysql://86.28.169.115:3306/Big_Issue_Schema?</url>
+		<u>Guy</u>
+		<p>BigIssue</p>
+	</database>
+	
+</connection>
