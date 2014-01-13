@@ -34,6 +34,13 @@ public class TempMySQLDB implements MySQLDatabaseInterface {
 	public void removeUser(String userName){
 		map.remove(userName);
 	}
+	
+	public void changePass(String userName, byte[] password){
+		User user = map.get(userName);
+		user.setPass(password);
+		map.remove(userName);
+		map.put(userName, user);
+	}
 
 
 	//not implemented

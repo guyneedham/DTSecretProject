@@ -5,7 +5,6 @@ public class User {
 	private byte[] salt;
 	private byte[] pass;
 	private String name;
-	private int ID;
 	
 	public byte[] getSalt() {
 		return salt;
@@ -31,12 +30,5 @@ public class User {
 		this.name = name;
 	}
 	
-	public int getID() {
-		return ID;
-	}
-	
-	public void setID(int iD) {
-		ID = iD;
-	}	
 	
 }

@@ -69,5 +69,13 @@ public class UserControllerTest {
 		assertEquals(1,value);
 	}
 	
+	@Test
+	public void testChangePasswordChangesPassword(){
+		uc.newUser(userName, password);
+		uc.changePass(userName, "newPass");
+		int value = uc.check(userName, "newPass");
+		assertEquals(0,value);				
+	}
+	
 	
 }

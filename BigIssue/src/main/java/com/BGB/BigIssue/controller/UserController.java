@@ -70,8 +70,18 @@ public class UserController {
 		return this.user;
 	}
 	
+	/**
+	 * Removes a user from storage.
+	 * @param userName
+	 */
 	public void removeUser(String userName){
 		storage.removeUser(userName);
+	}
+	
+	public void changePass(String userName, String pass){
+		User user = storage.getUser(userName);
+		byte[] password = encryptor.encrypt(pass, user.getSalt());
+		storage.changePass(userName, password);
 	}
 	
 }

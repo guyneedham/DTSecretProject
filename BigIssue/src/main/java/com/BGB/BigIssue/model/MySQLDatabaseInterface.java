@@ -19,5 +19,6 @@ public interface MySQLDatabaseInterface {
 	public void newUser(User user);
 	public User getUser(String userName);
 	public void removeUser(String userName);
+	public void changePass(String userName, byte[] password);
 
 }
