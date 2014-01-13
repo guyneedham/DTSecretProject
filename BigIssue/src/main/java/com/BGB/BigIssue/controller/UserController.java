@@ -5,6 +5,13 @@ import com.BGB.BigIssue.model.SHA1Encryption;
 import com.BGB.BigIssue.model.User;
 import com.BGB.BigIssue.model.UserFactory;
 
+/**
+ * Controller responsible for User object management.
+ * Adds and removes users from storage.
+ * Logs users in and verifies them.
+ * @author guyneedham
+ *
+ */
 public class UserController {
 
 	private UserFactory uf;
@@ -18,6 +25,11 @@ public class UserController {
 		this.encryptor = encryptor;
 	}
 	
+	/**
+	 * The newUser method creates a new stored user with a username and password
+	 * @param userName
+	 * @param password
+	 */
 	public void newUser(String userName, String password){
 		User user = (User) uf.newObject();
 		user.setName(userName);
@@ -27,6 +39,12 @@ public class UserController {
 		storage.newUser(user);		
 	}
 	
+	/**
+	 * The check method checks if the username and password are valid.
+	 * @param userName
+	 * @param password
+	 * @return 0 if the username and password are valid, 1 if the username if not found and 2 if the password is incorrect.
+	 */
 	public int check(String userName, String password){
 		User userUnderTest = storage.getUser(userName);
 		
@@ -44,6 +62,10 @@ public class UserController {
 		
 	}
 	
+	/**
+	 * Returns a User object. This object is null if the check() method did not return 0.
+	 * @return User
+	 */
 	public User login(){
 		return this.user;
 	}

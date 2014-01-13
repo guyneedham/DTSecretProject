@@ -4,7 +4,11 @@ import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+/**
+ * Temporary data structure to allow testing of logging in and user creation.
+ * @author guyneedham
+ *
+ */
 public class TempMySQLDB implements MySQLDatabaseInterface {
 
 	HashMap<String,User> map = new HashMap<String,User>();
