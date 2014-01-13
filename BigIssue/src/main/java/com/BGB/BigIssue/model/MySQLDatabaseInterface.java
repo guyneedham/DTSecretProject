@@ -16,5 +16,9 @@ public interface MySQLDatabaseInterface {
 	public void vendorWithdrawsFromSavings(String firstname, String lastname, DecimalFormat moneyOut);
 	public ArrayList publishBadgeHistory(int badgeID); //arraylist of pitches
 	public ArrayList publishVendorHistory(int vendorID); //arraylist of badges
+	public void newUser(User user);
+	public User getUser(String userName);
+	public void removeUser(String userName);
+	public void changePass(String userName, byte[] password);
 
 }
