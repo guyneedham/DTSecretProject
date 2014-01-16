@@ -18,6 +18,7 @@ public class UserController {
 	private SHA1Encryption encryptor;
 	private MySQLDatabaseInterface storage;
 	private User user;
+	public static String userName;
 	
 	public UserController(UserFactory uf, MySQLDatabaseInterface storage, SHA1Encryption encryptor){
 		this.uf = uf;
@@ -67,6 +68,7 @@ public class UserController {
 	 * @return User
 	 */
 	public User login(){
+		UserController.userName = user.getName();
 		return this.user;
 	}
 	
