@@ -14,8 +14,8 @@ public interface MySQLDatabaseInterface {
 	public ArrayList<Pitch> listOfUnregisteredPitches(); //arraylist of pitches
 	public void vendorAddsToSavings(String firstname, String lastname, DecimalFormat moneyIn);
 	public void vendorWithdrawsFromSavings(String firstname, String lastname, DecimalFormat moneyOut);
-	public ArrayList publishBadgeHistory(int badgeID); //arraylist of pitches
-	public ArrayList publishVendorHistory(int vendorID); //arraylist of badges
+	public ArrayList<Pitch> publishBadgeHistory(int badgeID); //arraylist of pitches
+	public ArrayList<Badge> publishVendorHistory(int vendorID); //arraylist of badges
 	public void newUser(User user);
 	public User getUser(String userName);
 	public void removeUser(String userName);

@@ -4,7 +4,7 @@ import com.BGB.BigIssue.model.MySQLDatabaseInterface;
 
 public class BibController {
 
-	MySQLDatabaseInterface storage;
+	private MySQLDatabaseInterface storage;
 	
 	public BibController(MySQLDatabaseInterface storage){
 		this.storage = storage;

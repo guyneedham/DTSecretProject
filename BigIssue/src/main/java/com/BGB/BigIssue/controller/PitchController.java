@@ -9,8 +9,8 @@ import com.BGB.BigIssue.model.PitchFactory;
 public class PitchController {
 
 
-	MySQLDatabaseInterface storage;
-	PitchFactory pf;
+	private MySQLDatabaseInterface storage;
+	private PitchFactory pf;
 	
 	public PitchController(MySQLDatabaseInterface storage, PitchFactory pf){
 		this.storage = storage;
@@ -21,6 +21,12 @@ public class PitchController {
 		return storage.listOfUnregisteredPitches();
 	}
 	
+	public void registerPitch(int badge, int pitch){
+		storage.addPitchToVendor(badge, pitch);
+	}
 	
+	public ArrayList<Pitch> badgeHistory(int badgeID){
+		return storage.publishBadgeHistory(badgeID);
+	}
 	
 }
