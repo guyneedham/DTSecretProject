@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public interface MySQLDatabaseInterface {
+public interface StorageInterface {
 
 	public void addVendor(String firstname, String lastname);
 	public void removeVendor(String firstname, String lastname);

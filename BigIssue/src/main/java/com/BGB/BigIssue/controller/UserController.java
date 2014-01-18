@@ -1,6 +1,6 @@
 package com.BGB.BigIssue.controller;
 
-import com.BGB.BigIssue.model.MySQLDatabaseInterface;
+import com.BGB.BigIssue.model.StorageInterface;
 import com.BGB.BigIssue.model.SHA1Encryption;
 import com.BGB.BigIssue.model.User;
 import com.BGB.BigIssue.model.UserFactory;
@@ -16,11 +16,11 @@ public class UserController {
 
 	private UserFactory uf;
 	private SHA1Encryption encryptor;
-	private MySQLDatabaseInterface storage;
+	private StorageInterface storage;
 	private User user;
 	public static String userName;
 	
-	public UserController(UserFactory uf, MySQLDatabaseInterface storage, SHA1Encryption encryptor){
+	public UserController(UserFactory uf, StorageInterface storage, SHA1Encryption encryptor){
 		this.uf = uf;
 		this.storage = storage;
 		this.encryptor = encryptor;

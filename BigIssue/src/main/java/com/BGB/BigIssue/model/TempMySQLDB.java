@@ -9,7 +9,7 @@ import java.util.HashMap;
  * @author guyneedham
  *
  */
-public class TempMySQLDB implements MySQLDatabaseInterface {
+public class TempMySQLDB implements StorageInterface {
 
 	HashMap<String,User> map = new HashMap<String,User>();
 

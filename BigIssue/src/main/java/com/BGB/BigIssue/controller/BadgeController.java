@@ -1,14 +1,14 @@
 package com.BGB.BigIssue.controller;
 
 
-import com.BGB.BigIssue.model.MySQLDatabaseInterface;
+import com.BGB.BigIssue.model.StorageInterface;
 
 public class BadgeController {
 
 
-	private MySQLDatabaseInterface storage;
+	private StorageInterface storage;
 	
-	public BadgeController(MySQLDatabaseInterface storage){
+	public BadgeController(StorageInterface storage){
 		this.storage = storage;
 	}
 	

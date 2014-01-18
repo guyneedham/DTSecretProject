@@ -5,7 +5,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import com.BGB.BigIssue.model.Badge;
-import com.BGB.BigIssue.model.MySQLDatabaseInterface;
+import com.BGB.BigIssue.model.StorageInterface;
 import com.BGB.BigIssue.model.Vendor;
 import com.BGB.BigIssue.model.VendorFactory;
 /**
@@ -16,10 +16,10 @@ import com.BGB.BigIssue.model.VendorFactory;
 public class VendorController {
 
 
-	private MySQLDatabaseInterface storage;
+	private StorageInterface storage;
 	private VendorFactory vf;
 	
-	public VendorController(MySQLDatabaseInterface storage, VendorFactory vf){
+	public VendorController(StorageInterface storage, VendorFactory vf){
 		this.storage = storage;
 		this.vf = vf;
 	}
