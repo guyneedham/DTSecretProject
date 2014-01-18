@@ -19,6 +19,7 @@ public class UserControllerTest {
 	private String userName;
 	private String password;
 	private SHA1Encryption ec;
+	private LoginController lc;
 	
 	@Before
 	public void setup(){
@@ -29,43 +30,17 @@ public class UserControllerTest {
 		db = new TempMySQLDB();
 		ec = new SHA1Encryption();
 		
+		lc = new LoginController(ec, db);
 		uc = new UserController(uf,db,ec);
 	}
 	
-	@Test
-	public void testNewUserCreatesAUser(){
-		uc.newUser(userName, password);
-		uc.check(userName, password);
-		User user = uc.login();
-		assertEquals(user.getName(),userName);
-	}
-	
-	@Test
-	public void testLoginReturnsZeroWithCorrectDetails(){	
-		uc.newUser(userName, password);
-		int value = uc.check(userName, password);
-		assertEquals(0,value);
-	}
-	
-	@Test
-	public void testLoginReturnsOneWithIncorrectUserName(){
-		uc.newUser(userName, password);
-		int value = uc.check("wrong", password);
-		assertEquals(1,value);
-	}
-	
-	@Test
-	public void testLoginReturnsTwoWithIncorrectPassword(){
-		uc.newUser(userName, password);
-		int value = uc.check(userName, "wrong password");
-		assertEquals(2,value);
-	}
+
 	
 	@Test
 	public void testRemoveUserRemovesAUser(){
 		uc.newUser(userName, password);
 		uc.removeUser(userName);
-		int value = uc.check(userName, password);
+		int value = lc.check(userName, password);
 		assertEquals(1,value);
 	}
 	
@@ -73,7 +48,7 @@ public class UserControllerTest {
 	public void testChangePasswordChangesPassword(){
 		uc.newUser(userName, password);
 		uc.changePass(userName, "newPass");
-		int value = uc.check(userName, "newPass");
+		int value = lc.check(userName, "newPass");
 		assertEquals(0,value);				
 	}
 	

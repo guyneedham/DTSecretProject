@@ -1,11 +1,14 @@
 package com.BGB.BigIssue.model;
 
+import java.sql.Date;
+
 public class Pitch {
 
 	private int PitchID;
 	private String location1;
 	private String location2;
 	private String location3;
+	private Date registeredDate;
 	
 	public int getPitchID() {
 		return PitchID;
@@ -37,6 +40,14 @@ public class Pitch {
 	
 	public void setLocation3(String location3) {
 		this.location3 = location3;
+	}
+
+	public Date getRegisteredDate() {
+		return registeredDate;
+	}
+
+	public void setRegisteredDate(Date registeredDate) {
+		this.registeredDate = registeredDate;
 	}
 	
 }

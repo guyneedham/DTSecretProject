@@ -27,12 +27,19 @@ public class MySQLConnectionPool extends ConnectionPool {
 	public static ForkJoinPool pool;
 	public static AtomicInteger size;
 
-	public static MySQLConnectionPool getInstance(String url, String name, String pass, int conns, int threads){
+	public static MySQLConnectionPool getInstance(String url, String uname, String upass, int conns, int threads){
 		if(instance != null){
-			return instance;
+			if(name.equals(uname) && pass.equals(upass)){
+				return instance;
+			} else {
+				connList = Collections.synchronizedList(new ArrayList<Connection>());
+				instance = new MySQLConnectionPool(url, uname, upass, conns, threads);
+				return instance;
+			}
+			
 		} else {
 			connList = Collections.synchronizedList(new ArrayList<Connection>());
-			instance = new MySQLConnectionPool(url, name, pass, conns, threads);
+			instance = new MySQLConnectionPool(url, uname, upass, conns, threads);
 			return instance;
 		}
 	}
