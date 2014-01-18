@@ -1,8 +1,7 @@
 package com.BGB.BigIssue.controller;
 
-import com.BGB.BigIssue.model.ConnectionPool;
-import com.BGB.BigIssue.model.ConnectionSettings;
-import com.BGB.BigIssue.model.MySQLConnectionPool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.BGB.BigIssue.model.StorageInterface;
 import com.BGB.BigIssue.model.SHA1Encryption;
 import com.BGB.BigIssue.model.User;
@@ -21,9 +20,10 @@ public class UserController {
 	private UserFactory uf;
 	private SHA1Encryption encryptor;
 	private StorageInterface storage;
-	public static User user;
-	public static String userName;
-	private MySQLConnectionPool pool;
+	private User user;
+	private String userName;
+	
+	private final Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	public UserController(UserFactory uf, StorageInterface storage, SHA1Encryption encryptor){
 		this.uf = uf;
@@ -42,7 +42,9 @@ public class UserController {
 		byte[] salt = encryptor.generateSalt();
 		user.setSalt(salt);
 		user.setPass(encryptor.encrypt(password, salt));
-		storage.newUser(user);		
+		storage.newUser(user);
+		storage.newStorageUser(userName, password);
+		logger.info("Created a new user {} for user {}.",userName,LoginController.userName);
 	}
 	
 	
@@ -51,6 +53,7 @@ public class UserController {
 	 * @param userName a String the username to remove
 	 */
 	public void removeUser(String userName){
+		logger.info("Removing user {} for user {}.",userName,LoginController.userName);
 		storage.removeUser(userName);
 	}
 	
@@ -58,12 +61,13 @@ public class UserController {
 	 * The changePass method changes a named user's password. This method should only be accessible from the admin area.
 	 * @param userName a String the username of the user to alter
 	 * @param pass a String the new password
-	 */
-	
+	 */	
 	public void changePass(String userName, String pass){
 		User user = storage.getUser(userName);
 		byte[] password = encryptor.encrypt(pass, user.getSalt());
 		storage.changePass(userName, password);
+		storage.changeStoragePassword(userName,pass);
+		logger.info("Changed the password of user {} for user {}.",userName,LoginController.userName);
 	}
 	
 	/**
@@ -75,6 +79,8 @@ public class UserController {
 	 * @return int 0 if successfully changed, 1 if the oldPass was incorrect
 	 */
 	public int changeOwnPass(String oldPass, String newPass){
+		this.user = LoginController.user;
+		
 		byte[] oldPassEncrypted = user.getPass();
 		byte[] salt = user.getSalt();
 		
@@ -83,8 +89,10 @@ public class UserController {
 		if(checkOld){
 			byte[] newPassEncrypted = encryptor.encrypt(newPass, salt);
 			storage.changePass(userName, newPassEncrypted);
+			logger.info("User {} changed their password.",user.getName());
 			return 0;
 		} else {
+			logger.info("User {} failed to change their password.",user.getName());
 			return 1;
 		}
 	}

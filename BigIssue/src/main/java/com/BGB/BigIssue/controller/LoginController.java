@@ -1,12 +1,14 @@
 package com.BGB.BigIssue.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.BGB.BigIssue.model.ConnectionPool;
 import com.BGB.BigIssue.model.ConnectionSettings;
 import com.BGB.BigIssue.model.MySQLConnectionPool;
 import com.BGB.BigIssue.model.SHA1Encryption;
 import com.BGB.BigIssue.model.StorageInterface;
 import com.BGB.BigIssue.model.User;
-import com.BGB.BigIssue.model.UserFactory;
 
 /**
  * The LoginController is responsible for controlling users logging into the app.
@@ -15,13 +17,13 @@ import com.BGB.BigIssue.model.UserFactory;
  */
 public class LoginController {
 
-	private UserFactory uf;
 	private SHA1Encryption encryptor;
 	private StorageInterface storage;
-	private User user;
+	public static User user;
 	public static String userName;
 	private MySQLConnectionPool pool;
 	
+	private final Logger logger = LoggerFactory.getLogger(LoginController.class);
 	
 	public LoginController(SHA1Encryption enc, StorageInterface stor){
 		this.storage = stor;
@@ -46,12 +48,15 @@ public class LoginController {
 			if(encryptor.authenticate(password, userUnderTest.getPass(), userUnderTest.getSalt())){
 							
 				pool = MySQLConnectionPool.getInstance(settings.getServ(), userName, password, 1, 1);
-				this.user = userUnderTest;
+				LoginController.user = userUnderTest;
+				logger.info("User {} logged in.",userName);
 				return 0;
 			} else {
+				logger.info("User {} entered an incorrect password.",userName);
 				return 2;
 			}
 		} else {
+			logger.info("Username {} was not found.",userName);
 			return 1;
 		}
 		
@@ -64,6 +69,7 @@ public class LoginController {
 	 * @return pool a ConnectionPool with the user credentials.
 	 */
 	public ConnectionPool getUserPool(){
+		logger.debug("Returning the user specific connection pool for user {}.",LoginController.userName);
 		return this.pool;
 	}
 	
@@ -72,9 +78,9 @@ public class LoginController {
 	 * @return User
 	 */
 	public User login(){
-		UserController.user = this.user;
+		logger.debug("Setting the global username to {} and returning the user.",user.getName());
 		LoginController.userName = user.getName();
-		return this.user;
+		return LoginController.user;
 	}
 	
 	

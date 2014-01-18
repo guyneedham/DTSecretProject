@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import com.BGB.BigIssue.model.StorageInterface;
 import com.BGB.BigIssue.model.Pitch;
-import com.BGB.BigIssue.model.PitchFactory;
 /**
  * The PitchController class is responsible for passing data from the view to the model.
  * It is used to show unregistered vendor pitches, register pitches and show the badge history of a user.

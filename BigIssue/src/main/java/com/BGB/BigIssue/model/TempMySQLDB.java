@@ -13,6 +13,7 @@ public class TempMySQLDB implements StorageInterface {
 
 	HashMap<String,User> map = new HashMap<String,User>();
 
+	HashMap<String,String> users = new HashMap<String, String>();
 	public void newUser(User user) {
 		//System.out.println("Putting a user");
 		map.put(user.getName(),user);
@@ -96,6 +97,17 @@ public class TempMySQLDB implements StorageInterface {
 	public ArrayList publishVendorHistory(int vendorID) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void newStorageUser(String userName, String password) {
+		users.put(userName, password);
+		
+	}
+
+	public void changeStoragePassword(String userName, String pass) {
+		users.remove(userName);
+		users.put(userName, pass);
+		
 	}
 
 	
