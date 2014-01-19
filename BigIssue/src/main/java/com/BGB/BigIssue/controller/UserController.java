@@ -1,7 +1,10 @@
 package com.BGB.BigIssue.controller;
 
+import java.util.HashMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.BGB.BigIssue.model.StorageInterface;
 import com.BGB.BigIssue.model.SHA1Encryption;
 import com.BGB.BigIssue.model.User;
@@ -63,7 +66,8 @@ public class UserController {
 	 * @param pass a String the new password
 	 */	
 	public void changePass(String userName, String pass){
-		User user = storage.getUser(userName);
+		HashMap<Integer,User> hm = storage.getUser(userName);
+		User user = hm.get(1);
 		byte[] password = encryptor.encrypt(pass, user.getSalt());
 		storage.changePass(userName, password);
 		storage.changeStoragePassword(userName,pass);

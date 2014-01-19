@@ -1,5 +1,7 @@
 package com.BGB.BigIssue.controller;
 
+import java.util.HashMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,9 +44,11 @@ public class LoginController {
 	 */
 	public int check(String userName, String password){
 		
-		User userUnderTest = storage.getUser(userName);
+		HashMap<Integer,User> hm = storage.getUser(userName);
+		if(hm.containsKey(1)){
+			User userUnderTest = hm.get(1);
 		
-		if(userUnderTest != null){
+		//if(userUnderTest != null){
 			
 			if(encryptor.authenticate(password, userUnderTest.getPass(), userUnderTest.getSalt())){
 							

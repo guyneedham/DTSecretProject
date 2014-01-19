@@ -2,9 +2,9 @@ package com.BGB.BigIssue.model;
 
 public class VendorFactory implements AbstractFactory {
 
-	public Object newObject() {
+	public Vendor newObject() {
 		// TODO Auto-generated method stub
-		return null;
+		return new Vendor();
 	}
 
 }

@@ -5,7 +5,10 @@ import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.BGB.BigIssue.model.ConnectionPool;
 import com.BGB.BigIssue.model.ConnectionSettings;
+import com.BGB.BigIssue.model.MySQLConnectionPool;
+import com.BGB.BigIssue.model.MySQLDatabase;
 import com.BGB.BigIssue.model.SHA1Encryption;
 import com.BGB.BigIssue.model.TempMySQLDB;
 import com.BGB.BigIssue.model.User;
@@ -15,7 +18,7 @@ public class LoginControllerTest {
 
 
 	private static UserController uc;
-	private static TempMySQLDB db;
+	private static MySQLDatabase db;
 	private static UserFactory uf;
 	private static String userName;
 	private static String password;
@@ -28,24 +31,20 @@ public class LoginControllerTest {
 	public static void setUpBeforeClass() throws Exception {
 		userName = "name";
 		password = "password";
+		settings = new ConnectionSettings();
+		MySQLConnectionPool pool = MySQLConnectionPool.getInstance(settings.getServ(), settings.getName(), settings.getPass(), 1, 1);
+		uf = new UserFactory();
 		
-		db = new TempMySQLDB();
+		db = new MySQLDatabase(pool,uf);
 		ec = new SHA1Encryption();
 		
-		uf = new UserFactory();
-		settings = new ConnectionSettings();
+		
+		
 		lc = new LoginController(ec,db,settings);
 
 		uc = new UserController(uf,db,ec);
 
-		uc.newUser(userName, password);
-	}
-
-	@Test
-	public void testNewUserCreatesAUser(){
-		lc.check(userName, password);
-		User user = lc.login();
-		assertEquals(user.getName(),userName);
+		//uc.newUser(userName, password);
 	}
 	
 	@Test
@@ -56,14 +55,14 @@ public class LoginControllerTest {
 	
 	@Test
 	public void testLoginReturnsOneWithIncorrectUserName(){
-		uc.newUser(userName, password);
+		//uc.newUser(userName, password);
 		int value = lc.check("wrong", password);
 		assertEquals(1,value);
 	}
 	
 	@Test
 	public void testLoginReturnsTwoWithIncorrectPassword(){
-		uc.newUser(userName, password);
+		//uc.newUser(userName, password);
 		int value = lc.check(userName, "wrong password");
 		assertEquals(2,value);
 	}

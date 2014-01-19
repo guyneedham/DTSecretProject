@@ -47,6 +47,11 @@ public class BadgeController {
 		return badgeID;
 	}
 	
+	/**
+	 * The badgeIDToBadge method adds a specific badge ID to a type of badge.
+	 * @param vendorBadgeID int the badge ID of the vendor
+	 * @param badge int the ID of the badge type
+	 */
 	public void badgeIDToBadge(int vendorBadgeID, int badge){
 		logger.info("Registering vendor with badge ID {} to badge {} for user {}.",vendorBadgeID,badge,LoginController.userName);
 		storage.badgeIDToBadge(vendorBadgeID,badge);
