@@ -80,8 +80,27 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public int getVendorIDFromName(String firstname, String lastname) {
-		// TODO Auto-generated method stub
-		return 0;
+		// TODO Auto-generated method stub Call VendorIDFromNames
+		Connection conn = pool.checkOut();
+		int vid = 0;
+		try {
+
+			CallableStatement stmt = conn.prepareCall(" Call VendorIDFromNames(?,?)");
+			//name salt password
+			stmt.setString(1, firstname);
+			stmt.setString(2, lastname);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				vid = rs.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
+		return vid;
 	}
 
 	public void addPitchToVendor(int badge, int pitch) {
@@ -162,7 +181,7 @@ public class MySQLDatabase implements StorageInterface {
 		try {
 
 			CallableStatement stmt = conn.prepareCall("Call GetUser(?)");
-			
+
 			//name salt password
 			stmt.setString(1, userName);
 			ResultSet rs = stmt.executeQuery();
@@ -178,13 +197,13 @@ public class MySQLDatabase implements StorageInterface {
 				}
 				else{
 					hmap.put(0,user);
-					
+
 				}
-				
-				
+
+
 			}
 			return hmap;
-			
+
 
 
 		} catch (SQLException e) {
@@ -194,7 +213,7 @@ public class MySQLDatabase implements StorageInterface {
 			pool.checkIn(conn);
 		}
 		return hmap;
-		
+
 	}
 
 	public void removeUser(String userName) {
@@ -256,7 +275,7 @@ public class MySQLDatabase implements StorageInterface {
 
 	public void assignTabardToVendor(int tabardID, int vendorID) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public ArrayList<Tabard> listAvailableTabards() {
