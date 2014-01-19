@@ -14,10 +14,12 @@ public class MySQLDatabase implements StorageInterface {
 
 	private MySQLConnectionPool pool;
 	private UserFactory uf;
+	private VendorFactory vf;
 
-	public MySQLDatabase(MySQLConnectionPool pool, UserFactory uf){
+	public MySQLDatabase(MySQLConnectionPool pool, UserFactory uf, VendorFactory vf){
 		this.pool = pool;
 		this.uf = uf;
+		this.vf = vf;
 	}
 
 	public void addVendor(String firstname, String lastname) {
@@ -269,8 +271,28 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public Vendor getVendor(int iD) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = pool.checkOut();
+		Vendor vendor = vf.newObject();
+		
+		try {
+
+			CallableStatement stmt = conn.prepareCall(" Call GetVendor(?)");
+			stmt.setInt(1, iD);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				vendor.setVendorID(rs.getInt(1));
+				vendor.setFirstName(rs.getString(2));
+				vendor.setLastName(rs.getString(3));
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
+		
+		return vendor;
 	}
 
 	public void assignTabardToVendor(int tabardID, int vendorID) {
