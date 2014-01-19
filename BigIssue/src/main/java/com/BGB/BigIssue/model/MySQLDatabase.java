@@ -8,23 +8,53 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MySQLDatabase implements StorageInterface {
 
 	private MySQLConnectionPool pool;
-	
-	public MySQLDatabase(MySQLConnectionPool pool){
+	private UserFactory uf;
+
+	public MySQLDatabase(MySQLConnectionPool pool, UserFactory uf){
 		this.pool = pool;
+		this.uf = uf;
 	}
-	
+
 	public void addVendor(String firstname, String lastname) {
-		// TODO Auto-generated method stub
+		Connection conn = pool.checkOut();
+
+		try {
+
+			CallableStatement stmt = conn.prepareCall("Call AddVendor(?,?)");
+			//name salt password
+			stmt.setString(1, firstname);
+			stmt.setString(2, lastname);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
 
 	}
 
 	public void removeVendor(String firstname, String lastname) {
-		// TODO Auto-generated method stub
+		Connection conn = pool.checkOut();
+
+		try {
+
+			CallableStatement stmt = conn.prepareCall("Call RemoveVendor(?,?)");
+			//name salt password
+			stmt.setString(1, firstname);
+			stmt.setString(2, lastname);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
+
 
 	}
 
@@ -80,23 +110,23 @@ public class MySQLDatabase implements StorageInterface {
 			while(rs.next()){
 				System.out.println(rs.getInt(1));
 			}
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			pool.checkIn(conn);
 		}
-		
+
 	}
-	
-	
+
+
 	public void newUser(User user) {
 		Connection conn = pool.checkOut();
-		
+
 		try {
-			
-			CallableStatement stmt = conn.prepareCall("NewUser(?,?,?)");
+
+			CallableStatement stmt = conn.prepareCall("CALL NewUser(?,?,?)");
 			//name salt password
 			stmt.setString(1, user.getName());
 			stmt.setBytes(2, user.getSalt());
@@ -111,8 +141,31 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public User getUser(String userName) {
+		Connection conn = pool.checkOut();
+		User user = (User) uf.newObject();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("Call GetUser(?,?,?,?)");
+			//name salt password
+			stmt.setString(1, userName);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				user.setName(rs.getString(2));
+				user.setSalt(rs.getBytes(3));
+				user.setPass(rs.getBytes(4));
+
+			}
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
+
 		// TODO Auto-generated method stub
-		return null;
+		return user;
 	}
 
 	public void removeUser(String userName) {
@@ -126,7 +179,7 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public void newStorageUser(String userName, String password) {
-		
+
 		Connection conn = pool.checkOut();
 		try {
 			String statement = "CREATE USER '"+userName+"'@'%' IDENTIFIED BY '"+password+"'";
@@ -135,7 +188,7 @@ public class MySQLDatabase implements StorageInterface {
 			//stmt.setString(2, password);
 			Statement stmt = conn.createStatement();
 			stmt.execute(statement);
-			
+
 			String statement2 = "GRANT ALL PRIVILEGES ON *.* TO '"+userName+"'@'%'";
 			Statement stmt2  = conn.createStatement();
 			stmt2.execute(statement2);
@@ -164,7 +217,7 @@ public class MySQLDatabase implements StorageInterface {
 
 	public void badgeIDToBadge(int vendorBadgeID, int badge) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public Vendor getVendor(int iD) {

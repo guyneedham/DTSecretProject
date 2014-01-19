@@ -1,6 +1,6 @@
 package com.BGB.BigIssue.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -44,7 +44,7 @@ public class MySQLDatabaseTest {
 		
 		byte[] salt = enc.generateSalt();
 		user.setSalt(salt);
-		user.setName("NewUserTest");
+		user.setName("Ben");
 		byte[] pass = enc.encrypt("password", salt);
 		user.setPass(pass);
 		
@@ -52,5 +52,11 @@ public class MySQLDatabaseTest {
 		int login = lc.check("GuyTest", "password");		
 		assertEquals(0,login);
 	}
+	
+	@Test
+	public void testAddVendorPlacesVendorInDatabase(){
+		db.addVendor("Testy", "McTest");
+	}
+	
 
 }
