@@ -15,11 +15,13 @@ public class MySQLDatabase implements StorageInterface {
 	private MySQLConnectionPool pool;
 	private UserFactory uf;
 	private VendorFactory vf;
+	private TabardFactory tf;
 
-	public MySQLDatabase(MySQLConnectionPool pool, UserFactory uf, VendorFactory vf){
+	public MySQLDatabase(MySQLConnectionPool pool, UserFactory uf, VendorFactory vf, TabardFactory tf){
 		this.pool = pool;
 		this.uf = uf;
 		this.vf = vf;
+		this.tf = tf;
 	}
 
 	public void addVendor(String firstname, String lastname) {
@@ -303,14 +305,15 @@ public class MySQLDatabase implements StorageInterface {
 
 	public Vendor getVendor(int iD) {
 		Connection conn = pool.checkOut();
-		Vendor vendor = vf.newObject();
+		Vendor vendor = null;
 
 		try {
 
-			CallableStatement stmt = conn.prepareCall(" Call GetVendor(?)");
+			CallableStatement stmt = conn.prepareCall("Call GetVendor(?)");
 			stmt.setInt(1, iD);
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
+				vendor = vf.newObject();
 				vendor.setVendorID(rs.getInt(1));
 				vendor.setFirstName(rs.getString(2));
 				vendor.setLastName(rs.getString(3));
@@ -338,17 +341,51 @@ public class MySQLDatabase implements StorageInterface {
 		} finally {
 			pool.checkIn(conn);
 		}
-*/ //Write stored proc for this in mysql
+		 */ //Write stored proc for this in mysql
 	}
 
 	public ArrayList<Tabard> listAvailableTabards() {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = pool.checkOut();
+		ArrayList<Tabard> tabards = new ArrayList<Tabard>();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL AvailableTabards()");
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				Tabard tabard = tf.newObject();
+				tabard.setID(rs.getInt(1));
+				tabard.setStatus(rs.getString(1));
+
+				tabards.add(tabard);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
+		return tabards;
 	}
 
 	public String viewTabardStatus(int tabardID) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = pool.checkOut();
+		String
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL AvailableTabards()");
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				Tabard tabard = tf.newObject();
+				tabard.setID(rs.getInt(1));
+				tabard.setStatus(rs.getString(1));
+
+				tabards.add(tabard);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
+		return tabards;
 	}
 
 }
