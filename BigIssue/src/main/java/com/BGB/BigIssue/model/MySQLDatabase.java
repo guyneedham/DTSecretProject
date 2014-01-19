@@ -3,10 +3,12 @@ package com.BGB.BigIssue.model;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MySQLDatabase implements StorageInterface {
 
@@ -69,10 +71,31 @@ public class MySQLDatabase implements StorageInterface {
 		return null;
 	}
 
+	public void testSelect(){
+		Connection conn = pool.checkOut();
+		String statement = "SELECT * FROM Vendor";
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(statement);
+			while(rs.next()){
+				System.out.println(rs.getInt(1));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
+		
+	}
+	
+	
 	public void newUser(User user) {
 		Connection conn = pool.checkOut();
 		
 		try {
+			
 			CallableStatement stmt = conn.prepareCall("NewUser(?,?,?)");
 			//name salt password
 			stmt.setString(1, user.getName());
@@ -111,7 +134,11 @@ public class MySQLDatabase implements StorageInterface {
 			//stmt.setString(1, userName);
 			//stmt.setString(2, password);
 			Statement stmt = conn.createStatement();
-			stmt.executeUpdate(statement);
+			stmt.execute(statement);
+			
+			String statement2 = "GRANT ALL PRIVILEGES ON *.* TO '"+userName+"'@'%'";
+			Statement stmt2  = conn.createStatement();
+			stmt2.execute(statement2);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -138,6 +165,11 @@ public class MySQLDatabase implements StorageInterface {
 	public void badgeIDToBadge(int vendorBadgeID, int badge) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public Vendor getVendor(int iD) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

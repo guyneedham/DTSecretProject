@@ -36,6 +36,11 @@ public class BadgeController {
 		storage.newBadge(name,colour,start,end);
 	}
 	
+	/**
+	 * The newBadgeIDForVendor method creates a badge ID for a 
+	 * @param vendorID
+	 * @return
+	 */
 	public int newBadgeIDForVendor(int vendorID){
 		int badgeID = storage.newBadgeIDForVendor(vendorID);
 		logger.info("Vendor {} was assigned badge ID {} for user {}.",vendorID, badgeID, LoginController.userName);
@@ -43,7 +48,7 @@ public class BadgeController {
 	}
 	
 	public void badgeIDToBadge(int vendorBadgeID, int badge){
-		ogger.info("")
+		logger.info("Registering vendor with badge ID {} to badge {} for user {}.",vendorBadgeID,badge,LoginController.userName);
 		storage.badgeIDToBadge(vendorBadgeID,badge);
 	}
 	

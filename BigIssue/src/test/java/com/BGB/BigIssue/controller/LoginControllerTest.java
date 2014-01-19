@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.BGB.BigIssue.model.ConnectionSettings;
 import com.BGB.BigIssue.model.SHA1Encryption;
 import com.BGB.BigIssue.model.TempMySQLDB;
 import com.BGB.BigIssue.model.User;
@@ -20,6 +21,7 @@ public class LoginControllerTest {
 	private static String password;
 	private static SHA1Encryption ec;
 	private static LoginController lc;
+	private static ConnectionSettings settings;
 	
 	
 	@BeforeClass
@@ -31,8 +33,8 @@ public class LoginControllerTest {
 		ec = new SHA1Encryption();
 		
 		uf = new UserFactory();
-		
-		lc = new LoginController(ec,db);
+		settings = new ConnectionSettings();
+		lc = new LoginController(ec,db,settings);
 
 		uc = new UserController(uf,db,ec);
 

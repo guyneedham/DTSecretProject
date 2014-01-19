@@ -52,5 +52,8 @@ public class VendorController {
 		return storage.publishVendorHistory(vendorID);
 	}
 	
+	public Vendor getVendor(int ID){
+		return storage.getVendor(ID);
+	}
 	
 }

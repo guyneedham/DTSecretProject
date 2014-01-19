@@ -25,5 +25,6 @@ public interface StorageInterface {
 	public void newBadge(String name, String colour, Date start, Date end);
 	public int newBadgeIDForVendor(int vendorID);
 	public void badgeIDToBadge(int vendorBadgeID, int badge);
+	public Vendor getVendor(int iD);
 
 }
