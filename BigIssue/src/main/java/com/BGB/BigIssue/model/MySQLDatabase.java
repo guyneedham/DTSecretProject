@@ -4,6 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -105,9 +106,12 @@ public class MySQLDatabase implements StorageInterface {
 		
 		Connection conn = pool.checkOut();
 		try {
-			CallableStatement stmt = conn.prepareCall("NewDBUser(?,?)");
-			stmt.setString(1, userName);
-			stmt.setString(2, password);
+			String statement = "CREATE USER '"+userName+"'@'%' IDENTIFIED BY '"+password+"'";
+			//CallableStatement stmt = conn.prepareCall("NewDBUser(?,?)");
+			//stmt.setString(1, userName);
+			//stmt.setString(2, password);
+			Statement stmt = conn.createStatement();
+			stmt.executeUpdate(statement);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -124,6 +128,16 @@ public class MySQLDatabase implements StorageInterface {
 	public void newBadge(String name, String colour, Date start, Date end) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public int newBadgeIDForVendor(int vendorID) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void badgeIDToBadge(int vendorBadgeID, int badge) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

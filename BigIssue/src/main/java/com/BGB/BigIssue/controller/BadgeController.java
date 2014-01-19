@@ -37,8 +37,14 @@ public class BadgeController {
 	}
 	
 	public int newBadgeIDForVendor(int vendorID){
-		storage.
+		int badgeID = storage.newBadgeIDForVendor(vendorID);
 		logger.info("Vendor {} was assigned badge ID {} for user {}.",vendorID, badgeID, LoginController.userName);
+		return badgeID;
+	}
+	
+	public void badgeIDToBadge(int vendorBadgeID, int badge){
+		
+		storage.badgeIDToBadge(vendorBadgeID,badge);
 	}
 	
 	
