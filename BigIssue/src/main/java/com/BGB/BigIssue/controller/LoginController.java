@@ -22,12 +22,14 @@ public class LoginController {
 	public static User user;
 	public static String userName;
 	private MySQLConnectionPool pool;
+	private ConnectionSettings settings;
 	
 	private final Logger logger = LoggerFactory.getLogger(LoginController.class);
 	
-	public LoginController(SHA1Encryption enc, StorageInterface stor){
+	public LoginController(SHA1Encryption enc, StorageInterface stor, ConnectionSettings settings){
 		this.storage = stor;
 		this.encryptor = enc;
+		this.settings = settings;
 	}
 	
 	/**
@@ -39,7 +41,6 @@ public class LoginController {
 	 * @return 0 if the username and password are valid, 1 if the username if not found and 2 if the password is incorrect.
 	 */
 	public int check(String userName, String password){
-		ConnectionSettings settings = new ConnectionSettings();
 		
 		User userUnderTest = storage.getUser(userName);
 		

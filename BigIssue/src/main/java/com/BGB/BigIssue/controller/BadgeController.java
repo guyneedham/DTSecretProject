@@ -43,7 +43,7 @@ public class BadgeController {
 	}
 	
 	public void badgeIDToBadge(int vendorBadgeID, int badge){
-		
+		ogger.info("")
 		storage.badgeIDToBadge(vendorBadgeID,badge);
 	}
 	
