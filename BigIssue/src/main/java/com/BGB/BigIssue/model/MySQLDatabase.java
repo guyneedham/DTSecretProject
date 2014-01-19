@@ -1,5 +1,6 @@
 package com.BGB.BigIssue.model;
 
+import java.awt.Image;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
@@ -386,6 +387,42 @@ public class MySQLDatabase implements StorageInterface {
 			pool.checkIn(conn);
 		}
 		return tabards;
+	}
+
+	public void addVendorImage(Image image, int vendorID, Date expiry) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void addExpiryToBadge(int badgeID, Date expiry) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public VendorBadge getVendorBadge(int badgeID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<Complaint> searchCompByVendor(int vendorID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<Complaint> searchCompByPitch(int pitchID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void addComplaint(int pitchID, int vendorID, Date date,
+			String complaint) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void banVendorFromPitch(int vendor, int pitch, Date date) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
