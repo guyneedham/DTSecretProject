@@ -153,8 +153,11 @@ public class MySQLDatabase implements StorageInterface {
 				user.setName(rs.getString(1));
 				user.setSalt(rs.getBytes(2));
 				user.setPass(rs.getBytes(3));
-
+				if(rs.wasNull()){
+					user = null;
+				}
 			}
+			
 
 
 		} catch (SQLException e) {
