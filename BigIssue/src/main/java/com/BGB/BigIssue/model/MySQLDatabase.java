@@ -17,12 +17,14 @@ public class MySQLDatabase implements StorageInterface {
 	private UserFactory uf;
 	private VendorFactory vf;
 	private TabardFactory tf;
+	private ComplaintsFactory cf;
 
-	public MySQLDatabase(MySQLConnectionPool pool, UserFactory uf, VendorFactory vf, TabardFactory tf){
+	public MySQLDatabase(MySQLConnectionPool pool, UserFactory uf, VendorFactory vf, TabardFactory tf, ComplaintsFactory cf){
 		this.pool = pool;
 		this.uf = uf;
 		this.vf = vf;
 		this.tf = tf;
+		this.cf = cf;
 	}
 
 	public void addVendor(String firstname, String lastname) {
@@ -158,7 +160,6 @@ public class MySQLDatabase implements StorageInterface {
 		}
 
 	}
-
 
 	public void newUser(User user) {
 		Connection conn = pool.checkOut();
@@ -369,34 +370,31 @@ public class MySQLDatabase implements StorageInterface {
 
 	public String viewTabardStatus(int tabardID) {
 		Connection conn = pool.checkOut();
-		String
+		String string =  null;
 		try {
 
-			CallableStatement stmt = conn.prepareCall("CALL AvailableTabards()");
+			CallableStatement stmt = conn.prepareCall("CALL ViewTabardStatus(?)");
+			stmt.setInt(1, tabardID);
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
-				Tabard tabard = tf.newObject();
-				tabard.setID(rs.getInt(1));
-				tabard.setStatus(rs.getString(1));
-
-				tabards.add(tabard);
+				string = rs.getString(0);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			pool.checkIn(conn);
 		}
-		return tabards;
+		return string;
 	}
 
 	public void addVendorImage(Image image, int vendorID, Date expiry) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void addExpiryToBadge(int badgeID, Date expiry) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public VendorBadge getVendorBadge(int badgeID) {
@@ -410,19 +408,53 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public ArrayList<Complaint> searchCompByPitch(int pitchID) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = pool.checkOut();
+		ArrayList<Complaint> complaints = new ArrayList<Complaint>();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL ComplaintByPitch(?)");
+			stmt.setInt(1, pitchID);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				Complaint complaint = cf.newObject();
+				complaint.setVendorID(rs.getInt(1));
+				complaint.setCompDate(rs.getDate(2));
+				complaint.setComplaint(rs.getString(3));
+				complaints.add(complaint);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
+		return complaints;
 	}
 
 	public void addComplaint(int pitchID, int vendorID, Date date,
 			String complaint) {
-		// TODO Auto-generated method stub
-		
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL AddComplaint(?,?,?,?)");
+
+			stmt.setInt(1, pitchID);
+			stmt.setInt(2, vendorID);
+			stmt.setDate(3, date);
+			stmt.setString(4, complaint);
+
+			stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
+
 	}
 
 	public void banVendorFromPitch(int vendor, int pitch, Date date) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
