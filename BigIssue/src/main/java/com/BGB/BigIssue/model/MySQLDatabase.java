@@ -145,7 +145,7 @@ public class MySQLDatabase implements StorageInterface {
 		User user = (User) uf.newObject();
 		try {
 
-			CallableStatement stmt = conn.prepareCall("Call GetUser(?,?,?,?)");
+			CallableStatement stmt = conn.prepareCall("Call GetUser(?)");
 			//name salt password
 			stmt.setString(1, userName);
 			ResultSet rs = stmt.executeQuery();
