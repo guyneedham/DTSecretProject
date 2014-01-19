@@ -22,5 +22,6 @@ public interface StorageInterface {
 	public void changePass(String userName, byte[] password);
 	public void newStorageUser(String userName, String password); //make a database user
 	public void changeStoragePassword(String userName, String pass); //change the database password
+	public void newBadge(String name, String colour, Date start, Date end);
 
 }
