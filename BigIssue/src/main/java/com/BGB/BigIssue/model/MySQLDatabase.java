@@ -10,7 +10,6 @@ import java.util.ArrayList;
 public class MySQLDatabase implements StorageInterface {
 
 	private MySQLConnectionPool pool;
-
 	
 	public MySQLDatabase(MySQLConnectionPool pool){
 		this.pool = pool;

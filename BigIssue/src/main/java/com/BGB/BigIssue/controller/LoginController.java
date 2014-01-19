@@ -68,7 +68,7 @@ public class LoginController {
 	 * 
 	 * @return pool a ConnectionPool with the user credentials.
 	 */
-	public ConnectionPool getUserPool(){
+	public MySQLConnectionPool getUserPool(){
 		logger.debug("Returning the user specific connection pool for user {}.",LoginController.userName);
 		return this.pool;
 	}
