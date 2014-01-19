@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.BGB.BigIssue.model.StorageInterface;
+import com.BGB.BigIssue.model.VendorBadge;
 
 /**
  * Controls activity for a badge, including creating a new badge, deleting a badge and assigning a vendor to a badge.
@@ -57,6 +58,26 @@ public class BadgeController {
 		storage.badgeIDToBadge(vendorBadgeID,badge);
 	}
 	
+	/**
+	 * The addExpiryToBadge method adds an expiry date to a badge.
+	 * 
+	 * @param badgeID int the ID of the badge
+	 * @param expiry Date the expiry date of the badge
+	 */
+	public void addExpiryToBadge(int badgeID, Date expiry){
+		logger.info("Adding expiry date {} to badge {} for user {}.",expiry,badgeID,LoginController.userName);
+		storage.addExpiryToBadge(badgeID, expiry);
+	}
 	
+	/**
+	 * The getVendorBadge method returns the vendor specific badge with a known badge ID.
+	 * 
+	 * @param badgeID int the ID of the badge
+	 * @return badge a VendorBadge
+	 */
+	public VendorBadge getVendorBadge(int badgeID){
+		logger.info("Getting the vendor specific badge with ID {} for user {}.",badgeID,LoginController.userName);
+		return storage.getVendorBadge(badgeID);
+	}
 	
 }

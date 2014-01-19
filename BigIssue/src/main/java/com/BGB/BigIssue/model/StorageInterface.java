@@ -1,5 +1,6 @@
 package com.BGB.BigIssue.model;
 
+import java.awt.Image;
 import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -30,5 +31,13 @@ public interface StorageInterface {
 	public void assignTabardToVendor(int tabardID, int vendorID);
 	public ArrayList<Tabard> listAvailableTabards();
 	public String viewTabardStatus(int tabardID);
+	public void addVendorImage(Image image, int vendorID, Date expiry);
+	public void addExpiryToBadge(int badgeID, Date expiry);
+	public VendorBadge getVendorBadge(int badgeID);
+	public ArrayList<Complaint> searchCompByVendor(int vendorID);
+	public ArrayList<Complaint> searchCompByPitch(int pitchID);
+	public void addComplaint(int pitchID, int vendorID, Date date,
+			String complaint);
+	public void banVendorFromPitch(int vendor, int pitch, Date date);
 
 }

@@ -1,5 +1,6 @@
 package com.BGB.BigIssue.controller;
 
+import java.awt.Image;
 import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -54,6 +55,9 @@ public class VendorController {
 	
 	public Vendor getVendor(int ID){
 		return storage.getVendor(ID);
+	}
+	public void addImage(Image image, int vendorID, Date expiry){
+		storage.addVendorImage(image,vendorID,expiry);
 	}
 	
 }
