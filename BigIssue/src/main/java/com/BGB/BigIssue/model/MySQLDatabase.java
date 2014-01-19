@@ -97,8 +97,18 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public void addPitchToVendor(int badge, int pitch) {
-		// TODO Auto-generated method stub
+		Connection conn = pool.checkOut();
+		try {
 
+			CallableStatement stmt = conn.prepareCall(" Call VendorToPitch(?,?)");
+			stmt.setInt(1, badge);
+			stmt.setInt(2, pitch);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
 	}
 
 	public ArrayList<Pitch> listOfUnregisteredPitches() {
@@ -207,12 +217,33 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public void removeUser(String userName) {
-		// TODO Auto-generated method stub
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL RemoveUser(?)");
+			stmt.setString(1, userName);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
 
 	}
 
 	public void changePass(String userName, byte[] password) {
-		// TODO Auto-generated method stub
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL ChangePassword(?)");
+			stmt.setString(1, userName);
+			stmt.setBytes(2, password);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
 
 	}
 
@@ -244,6 +275,19 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public void newBadge(String name, String colour, Date start, Date end) {
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL ChangePassword(?)");
+			stmt.setString(1, userName);
+			stmt.setBytes(2, password);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
+
 		// TODO Auto-generated method stub
 
 	}
