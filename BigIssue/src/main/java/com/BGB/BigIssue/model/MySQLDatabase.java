@@ -150,9 +150,9 @@ public class MySQLDatabase implements StorageInterface {
 			stmt.setString(1, userName);
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
-				user.setName(rs.getString(2));
-				user.setSalt(rs.getBytes(3));
-				user.setPass(rs.getBytes(4));
+				user.setName(rs.getString(1));
+				user.setSalt(rs.getBytes(2));
+				user.setPass(rs.getBytes(3));
 
 			}
 
