@@ -28,12 +28,10 @@ public class MySQLDatabase implements StorageInterface {
 		try {
 
 			CallableStatement stmt = conn.prepareCall("Call AddVendor(?,?)");
-			//name salt password
 			stmt.setString(1, firstname);
 			stmt.setString(2, lastname);
 			stmt.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			pool.checkIn(conn);
@@ -47,12 +45,10 @@ public class MySQLDatabase implements StorageInterface {
 		try {
 
 			CallableStatement stmt = conn.prepareCall("Call RemoveVendor(?,?)");
-			//name salt password
 			stmt.setString(1, firstname);
 			stmt.setString(2, lastname);
 			stmt.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			pool.checkIn(conn);
@@ -67,13 +63,11 @@ public class MySQLDatabase implements StorageInterface {
 		try {
 
 			CallableStatement stmt = conn.prepareCall("Call VendorAddsTransaction(?,?,?,?,?)");
-			//name salt password
 			stmt.setInt(1, badgeID);
 			stmt.setInt(2, hubLocation);
 			stmt.setInt(3, totalBought);
 			stmt.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			pool.checkIn(conn);
@@ -82,13 +76,11 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public int getVendorIDFromName(String firstname, String lastname) {
-		// TODO Auto-generated method stub Call VendorIDFromNames
 		Connection conn = pool.checkOut();
 		int vid = 0;
 		try {
 
 			CallableStatement stmt = conn.prepareCall(" Call VendorIDFromNames(?,?)");
-			//name salt password
 			stmt.setString(1, firstname);
 			stmt.setString(2, lastname);
 			ResultSet rs = stmt.executeQuery();
@@ -97,7 +89,6 @@ public class MySQLDatabase implements StorageInterface {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			pool.checkIn(conn);
@@ -148,7 +139,6 @@ public class MySQLDatabase implements StorageInterface {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			pool.checkIn(conn);
@@ -169,7 +159,6 @@ public class MySQLDatabase implements StorageInterface {
 			stmt.setBytes(3, user.getPass());
 			stmt.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			pool.checkIn(conn);
@@ -209,7 +198,6 @@ public class MySQLDatabase implements StorageInterface {
 
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			pool.checkIn(conn);
@@ -286,7 +274,6 @@ public class MySQLDatabase implements StorageInterface {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			pool.checkIn(conn);
