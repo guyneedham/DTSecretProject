@@ -278,18 +278,17 @@ public class MySQLDatabase implements StorageInterface {
 		Connection conn = pool.checkOut();
 		try {
 
-			CallableStatement stmt = conn.prepareCall("CALL ChangePassword(?)");
-			stmt.setString(1, userName);
-			stmt.setBytes(2, password);
+			CallableStatement stmt = conn.prepareCall("CALL AddBadge(?,?,?,?)");
+			stmt.setString(1, name);
+			stmt.setString(2, colour);
+			stmt.setDate(3, start);
+			stmt.setDate(4, end);
 			stmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			pool.checkIn(conn);
 		}
-
-		// TODO Auto-generated method stub
-
 	}
 
 	public int newBadgeIDForVendor(int vendorID) {
@@ -305,7 +304,7 @@ public class MySQLDatabase implements StorageInterface {
 	public Vendor getVendor(int iD) {
 		Connection conn = pool.checkOut();
 		Vendor vendor = vf.newObject();
-		
+
 		try {
 
 			CallableStatement stmt = conn.prepareCall(" Call GetVendor(?)");
@@ -322,13 +321,24 @@ public class MySQLDatabase implements StorageInterface {
 		} finally {
 			pool.checkIn(conn);
 		}
-		
+
 		return vendor;
 	}
 
 	public void assignTabardToVendor(int tabardID, int vendorID) {
-		// TODO Auto-generated method stub
+		/*Connection conn = pool.checkOut();
+		try {
 
+			CallableStatement stmt = conn.prepareCall("CALL ChangePassword(?)");
+			stmt.setString(1, userName);
+			stmt.setBytes(2, password);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
+*/ //Write stored proc for this in mysql
 	}
 
 	public ArrayList<Tabard> listAvailableTabards() {
