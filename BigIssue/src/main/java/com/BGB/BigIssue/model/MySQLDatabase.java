@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MySQLDatabase implements StorageInterface {
 
@@ -60,7 +61,21 @@ public class MySQLDatabase implements StorageInterface {
 
 	public void vendorAddsTransaction(int badgeID, int hubLocation,
 			int totalBought, DecimalFormat totalCash, Date DOT) {
-		// TODO Auto-generated method stub
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("Call VendorAddsTransaction(?,?,?,?,?)");
+			//name salt password
+			stmt.setInt(1, badgeID);
+			stmt.setInt(2, hubLocation);
+			stmt.setInt(3, totalBought);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
 
 	}
 
@@ -140,12 +155,14 @@ public class MySQLDatabase implements StorageInterface {
 		}
 	}
 
-	public User getUser(String userName) {
+	public HashMap<Integer,User> getUser(String userName) {
 		Connection conn = pool.checkOut();
 		User user = (User) uf.newObject();
+		HashMap<Integer, User> hmap = new HashMap<Integer, User>();
 		try {
 
 			CallableStatement stmt = conn.prepareCall("Call GetUser(?)");
+			
 			//name salt password
 			stmt.setString(1, userName);
 			ResultSet rs = stmt.executeQuery();
@@ -156,7 +173,17 @@ public class MySQLDatabase implements StorageInterface {
 				if(rs.wasNull()){
 					user = null;
 				}
+				if(user.getName().equals(userName)){
+					hmap.put(1, user);
+				}
+				else{
+					hmap.put(0,user);
+					
+				}
+				
+				
 			}
+			return hmap;
 			
 
 
@@ -166,9 +193,8 @@ public class MySQLDatabase implements StorageInterface {
 		} finally {
 			pool.checkIn(conn);
 		}
-
-		// TODO Auto-generated method stub
-		return user;
+		return hmap;
+		
 	}
 
 	public void removeUser(String userName) {
@@ -224,6 +250,21 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public Vendor getVendor(int iD) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void assignTabardToVendor(int tabardID, int vendorID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public ArrayList<Tabard> listAvailableTabards() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String viewTabardStatus(int tabardID) {
 		// TODO Auto-generated method stub
 		return null;
 	}
