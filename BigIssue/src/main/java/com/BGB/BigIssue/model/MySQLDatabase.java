@@ -1,6 +1,7 @@
 package com.BGB.BigIssue.model;
 
 import java.awt.Image;
+import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
@@ -68,6 +69,7 @@ public class MySQLDatabase implements StorageInterface {
 
 	public void vendorAddsTransaction(int badgeID, int hubLocation,
 			int totalBought, DecimalFormat totalCash, Date DOT) {
+		//not finished
 		Connection conn = pool.checkOut();
 		try {
 
@@ -146,6 +148,7 @@ public class MySQLDatabase implements StorageInterface {
 
 	public void vendorAddsToSavings(String firstname, String lastname,
 			DecimalFormat moneyIn) {
+		//not finished
 		Connection conn = pool.checkOut();
 		try {
 
@@ -213,24 +216,6 @@ public class MySQLDatabase implements StorageInterface {
 			pool.checkIn(conn);
 		}
 		return badges;
-	}
-
-	public void testSelect(){
-		Connection conn = pool.checkOut();
-		String statement = "SELECT * FROM Vendor";
-		try {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(statement);
-			while(rs.next()){
-				System.out.println(rs.getInt(1));
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			pool.checkIn(conn);
-		}
-
 	}
 
 	public void newUser(User user) {
@@ -479,8 +464,19 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public void addVendorImage(Image image, int vendorID, Date expiry) {
-		// TODO Auto-generated method stub
+		Connection conn = pool.checkOut();
+		try {
 
+			CallableStatement stmt = conn.prepareCall("CALL AddVendorImage(?,?,?)");
+			stmt.setBlob(1, (Blob) image);
+			stmt.setInt(2, vendorID);
+			stmt.setDate(3, expiry);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
 	}
 
 	public void addExpiryToBadge(int badgeID, Date expiry) {
