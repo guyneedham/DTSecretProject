@@ -430,7 +430,7 @@ public class MySQLDatabase implements StorageInterface {
 			CallableStatement stmt = conn.prepareCall("CALL AvailableTabards()");
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
-				Tabard tabard = tf.newObject();
+				Tabard tabard = (Tabard) tf.newObject();
 				tabard.setID(rs.getInt(1));
 				tabard.setStatus(rs.getString(1));
 

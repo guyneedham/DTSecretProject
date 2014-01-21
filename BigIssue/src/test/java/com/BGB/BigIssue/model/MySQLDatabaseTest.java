@@ -22,6 +22,8 @@ public class MySQLDatabaseTest {
 	private static UserFactory uf;
 	private static SHA1Encryption enc;
 	private static ComplaintsFactory cf;
+	private static PitchFactory pf;
+	private static BadgeFactory bf;
 	private static TabardFactory tf;
 	private static VendorFactory vf;
 	private static String firstname;
@@ -31,7 +33,7 @@ public class MySQLDatabaseTest {
 	public static void setUpBeforeClass() throws Exception {
 		settings = new ConnectionSettings();
 		pool = MySQLConnectionPool.getInstance(settings.getServ(),settings.getName(),settings.getPass(),1,1);
-		db = new MySQLDatabase(pool, uf, vf, tf, cf);
+		db = new MySQLDatabase(pool, uf, vf, tf, cf, pf, bf);
 		uf = new UserFactory();
 		enc = new SHA1Encryption();
 		uc = new UserController(uf,db,enc);
@@ -47,24 +49,6 @@ public class MySQLDatabaseTest {
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 		
-	}
-
-	@Test
-	public void testNewUserCreatesNewUser() {
-		
-		db.testSelect();
-		
-		User user = (User) uf.newObject();
-		
-		byte[] salt = enc.generateSalt();
-		user.setSalt(salt);
-		user.setName("Ben");
-		byte[] pass = enc.encrypt("password", salt);
-		user.setPass(pass);
-		
-		db.newUser(user);
-		int login = lc.check("GuyTest", "password");		
-		assertEquals(0,login);
 	}
 	
 	@Test
@@ -92,24 +76,8 @@ public class MySQLDatabaseTest {
 		assertNotEquals(result, 0);
 	}
 
-	@Test
-	public void testListAvailableTabardsReturnsAListOfAvailableTabards(){
-		ArrayList<Tabard> result = db.listAvailableTabards();
-		Tabard tabard = result.get(0);
-		String string = tabard.getStatus();
-		assertEquals(string, "available");
-	}
-	
-	@Test
-	public void testPublishVendorHistoryReturnsTheBadgeHistoryOfTheCorrectVendor(){
-		db.addVendor(firstname, lastname);
-		int vendorID = db.getVendorIDFromName(firstname, lastname);
-		ArrayList<Badge> arraylist = db.publishVendorHistory(vendorID);
-		Badge badge = arraylist.get(0);
-		int badgeid = badge.getBadgeID();
-		db.removeVendor(firstname, lastname);
-		assertNotEquals(badgeid, 0);
-	}
 
+	
+	
 	
 }
