@@ -3,6 +3,8 @@ package com.BGB.BigIssue.model;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertEquals;
 
+import java.sql.Date;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import org.junit.AfterClass;
@@ -28,7 +30,7 @@ public class MySQLDatabaseTest {
 	private static VendorFactory vf;
 	private static String firstname;
 	private static String lastname;
-	
+		
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		settings = new ConnectionSettings();
@@ -75,9 +77,39 @@ public class MySQLDatabaseTest {
 		db.removeVendor(firstname, lastname);
 		assertNotEquals(result, 0);
 	}
-
-
 	
+	/*@Test
+	public void testVendorAddsTransactionAddsATransactionToDatabase(){
+		db.vendorAddsTransaction(1, 1, 1, 2.0, Date.valueOf("2013-01-01"));
+	}*/
+
+	@Test
+	public void testAddPitchToVendor(){
+		db.addPitchToVendor(1, 1);
+		ArrayList<Pitch> pitches = db.publishBadgeHistory(1);
+		int pid = pitches.get(0).getPitchID();
+		assertEquals(pid, 1);
+		//null pointer
+	}
 	
+	@Test
+	public void testListOfUnregisterePitchesReturnsAnArrayListOfPitches(){
+		db.addPitch("Test", "Test", "Test");
+		ArrayList<Pitch> pitches = db.listOfUnregisteredPitches();
+		assertNotEquals(pitches.size(),0);
+		
+	}
+	
+	@Test
+	public void testPublishVendorHistory(){
+		ArrayList<Badge> badges = db.publishVendorHistory(1);
+		System.out.println(badges.get(0).getBadgeID());
+	}
+
+	@Test
+	public void testgetVendor(){
+		Vendor vendor = db.getVendor(1);
+		assertEquals(vendor.getVendorID(),1);
+	}
 	
 }

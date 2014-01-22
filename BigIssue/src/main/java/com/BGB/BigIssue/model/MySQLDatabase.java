@@ -34,6 +34,7 @@ public class MySQLDatabase implements StorageInterface {
 
 	public void addVendor(String firstname, String lastname) {
 		Connection conn = pool.checkOut();
+		//tested
 
 		try {
 
@@ -50,6 +51,7 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public void removeVendor(String firstname, String lastname) {
+		//tested
 		Connection conn = pool.checkOut();
 
 		try {
@@ -88,6 +90,7 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public int getVendorIDFromName(String firstname, String lastname) {
+		//tested
 		Connection conn = pool.checkOut();
 		int vid = 0;
 		try {
@@ -124,6 +127,7 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public ArrayList<Pitch> listOfUnregisteredPitches() {
+		//part tested
 		Connection conn = pool.checkOut();
 		ArrayList<Pitch> pitches = new ArrayList<Pitch>();
 		try {
@@ -131,7 +135,7 @@ public class MySQLDatabase implements StorageInterface {
 			CallableStatement stmt = conn.prepareCall("CALL AvailablePitches()");
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
-				Pitch pitch = (Pitch) pf.newObject();
+				Pitch pitch = new Pitch();
 				pitch.setPitchID(rs.getInt(1));
 				pitch.setLocation1(rs.getString(2));
 				pitch.setLocation2(rs.getString(3));
@@ -178,7 +182,7 @@ public class MySQLDatabase implements StorageInterface {
 			stmt.setInt(1, badgeID);
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
-				Pitch pitch = (Pitch) pf.newObject();
+				Pitch pitch = new Pitch();
 				pitch.setPitchID(rs.getInt(1));
 				pitch.setLocation1(rs.getString(2));
 				pitch.setLocation2(rs.getString(3));
@@ -194,6 +198,7 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public ArrayList<Badge> publishVendorHistory(int vendorID) {
+		//part tested
 		Connection conn = pool.checkOut();
 		ArrayList<Badge> badges = new ArrayList<Badge>();
 		try {
@@ -202,7 +207,7 @@ public class MySQLDatabase implements StorageInterface {
 			stmt.setInt(1, vendorID);
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
-				Badge badge = bf.newObject();
+				Badge badge = new Badge();
 				badge.setBadgeID(rs.getInt(1));
 				badge.setName(rs.getString(2));
 				badge.setColour(rs.getString(3));
@@ -361,7 +366,7 @@ public class MySQLDatabase implements StorageInterface {
 			CallableStatement stmt = conn.prepareCall("CALL AddBadgeToVendor(?,?)");
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
-				Pitch pitch = (Pitch) pf.newObject();
+				Pitch pitch = new Pitch();
 				pitch.setPitchID(rs.getInt(1));
 				pitch.setLocation1(rs.getString(2));
 				pitch.setLocation2(rs.getString(3));
@@ -383,6 +388,7 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public Vendor getVendor(int iD) {
+		//partly tested
 		Connection conn = pool.checkOut();
 		Vendor vendor = null;
 
@@ -392,7 +398,7 @@ public class MySQLDatabase implements StorageInterface {
 			stmt.setInt(1, iD);
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
-				vendor = vf.newObject();
+				vendor = new Vendor();
 				vendor.setVendorID(rs.getInt(1));
 				vendor.setFirstName(rs.getString(2));
 				vendor.setLastName(rs.getString(3));
@@ -430,7 +436,7 @@ public class MySQLDatabase implements StorageInterface {
 			CallableStatement stmt = conn.prepareCall("CALL AvailableTabards()");
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
-				Tabard tabard = (Tabard) tf.newObject();
+				Tabard tabard = new Tabard();
 				tabard.setID(rs.getInt(1));
 				tabard.setStatus(rs.getString(1));
 
@@ -494,7 +500,7 @@ public class MySQLDatabase implements StorageInterface {
 			stmt.setInt(1, vendorID);
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
-				Complaint complaint = cf.newObject();
+				Complaint complaint = new Complaint();
 				complaint.setVendorID(rs.getInt(1));
 				complaint.setCompDate(rs.getDate(2));
 				complaint.setComplaint(rs.getString(3));
@@ -517,7 +523,7 @@ public class MySQLDatabase implements StorageInterface {
 			stmt.setInt(1, pitchID);
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
-				Complaint complaint = cf.newObject();
+				Complaint complaint = new Complaint();
 				complaint.setVendorID(rs.getInt(1));
 				complaint.setCompDate(rs.getDate(2));
 				complaint.setComplaint(rs.getString(3));
@@ -562,6 +568,64 @@ public class MySQLDatabase implements StorageInterface {
 	public VendorBadge getVendorBadge(int badgeID) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public double getTotalBoughtForVendor(int vendor) {
+		Connection conn = pool.checkOut();
+		double total = 0;
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL GetVendorTransactionsTotal(?)");
+
+			stmt.setInt(1, vendor);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				total = rs.getDouble(1);	
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
+		return total;
+	}
+
+	public void addPitch(String location1, String location2, String location3) {
+		//tested
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL AddPitch(?,?,?)");
+
+			stmt.setString(1, location1);
+			stmt.setString(2, location2);
+			stmt.setString(3, location3);
+			
+			stmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
+		
+	}
+
+	public void removePitch(int pitchid) {
+		//works
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL RemovePitch(?)");
+
+			stmt.setInt(1, pitchid);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
 	}
 
 }
