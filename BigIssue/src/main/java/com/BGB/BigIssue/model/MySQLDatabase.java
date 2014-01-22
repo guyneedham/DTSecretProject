@@ -112,6 +112,7 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public void addPitchToVendor(int badge, int pitch) {
+		//tested
 		Connection conn = pool.checkOut();
 		try {
 
@@ -127,7 +128,7 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public ArrayList<Pitch> listOfUnregisteredPitches() {
-		//part tested
+		//tested
 		Connection conn = pool.checkOut();
 		ArrayList<Pitch> pitches = new ArrayList<Pitch>();
 		try {
@@ -174,6 +175,7 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public ArrayList<Pitch> publishBadgeHistory(int badgeID) {
+		//tested
 		Connection conn = pool.checkOut();
 		ArrayList<Pitch> pitches = new ArrayList<Pitch>();
 		try {
@@ -198,7 +200,7 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public ArrayList<Badge> publishVendorHistory(int vendorID) {
-		//part tested
+		//tested
 		Connection conn = pool.checkOut();
 		ArrayList<Badge> badges = new ArrayList<Badge>();
 		try {
@@ -341,6 +343,7 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public void newBadge(String name, String colour, Date start, Date end) {
+		//tested
 		Connection conn = pool.checkOut();
 		try {
 
@@ -388,7 +391,7 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public Vendor getVendor(int iD) {
-		//partly tested
+		//tested
 		Connection conn = pool.checkOut();
 		Vendor vendor = null;
 
@@ -601,15 +604,15 @@ public class MySQLDatabase implements StorageInterface {
 			stmt.setString(1, location1);
 			stmt.setString(2, location2);
 			stmt.setString(3, location3);
-			
+
 			stmt.executeUpdate();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			pool.checkIn(conn);
 		}	
-		
+
 	}
 
 	public void removePitch(int pitchid) {
@@ -626,6 +629,59 @@ public class MySQLDatabase implements StorageInterface {
 		} finally {
 			pool.checkIn(conn);
 		}	
+	}
+
+	public ArrayList<Badge> findBadge(String badgeName) {
+		//tested
+		Connection conn = pool.checkOut();
+		ArrayList<Badge> badges = new ArrayList<Badge>();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL FindBadge(?)");
+
+			stmt.setString(1, badgeName);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				Badge badge = new Badge();
+				badge.setBadgeID(rs.getInt(1));
+				badge.setName(rs.getString(2));
+				badge.setColour(rs.getString(3));
+				badge.setStart(rs.getDate(4));
+				badge.setEnd(rs.getDate(5));
+				badges.add(badge);	
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
+		return badges;
+	}
+
+	public ArrayList<Tabard> publishTabardHistory(int vendorid) {
+		//tested
+		Connection conn = pool.checkOut();
+		ArrayList<Tabard> tabards = new ArrayList<Tabard>();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL PublishTabardHistory(?)");
+
+			stmt.setInt(1, vendorid);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				Tabard tabard = new Tabard();
+				tabard.setID(rs.getInt(1));
+				tabard.setStatus(rs.getString(2));
+				tabards.add(tabard);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
+		return tabards;
 	}
 
 }
