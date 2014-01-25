@@ -38,6 +38,7 @@ public interface StorageInterface {
 	public void addComplaint(int pitchID, int vendorID, Date date,
 			String complaint);
 	public void banVendorFromPitch(int vendor, int pitch, Date date);
+	public ArrayList<Pitch> viewVendorsBannedPitches(int vendorID);
 	public float getTotalBoughtForVendor(int vendor);
 	public void addPitch(String location1, String location2, String location3);
 	public void removePitch(int pitchid);

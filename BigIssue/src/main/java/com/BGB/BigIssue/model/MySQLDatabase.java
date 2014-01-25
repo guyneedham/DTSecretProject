@@ -577,7 +577,21 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public void banVendorFromPitch(int vendor, int pitch, Date date) {
-		// TODO Auto-generated method stub
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL GetVendorTransactionsTotal(?)");
+
+			stmt.setInt(1, vendor);
+			stmt.setInt(2, pitch);
+			stmt.setDate(3, date);
+			stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
 
 	}
 
@@ -717,6 +731,32 @@ public class MySQLDatabase implements StorageInterface {
 			pool.checkIn(conn);
 		}	
 		return floaty;
+	}
+
+	public ArrayList<Pitch> viewVendorsBannedPitches(int vendorID) {
+		Connection conn = pool.checkOut();
+		ArrayList<Pitch> pitches = new ArrayList<Pitch>();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL ViewVendorsBannedPitches(?)");
+
+			stmt.setInt(1, vendorID);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				Pitch pitch = new Pitch();
+				pitch.setPitchID(rs.getInt(1));
+				pitch.setLocation1(rs.getString(2));
+				pitch.setLocation2(rs.getString(3));
+				pitch.setLocation3(rs.getString(4));
+				pitches.add(pitch);				
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
+		return pitches;
 	}
 
 }
