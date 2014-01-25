@@ -48,9 +48,9 @@ public class PitchController {
 	 * @param badge int badge ID of a vendor
 	 * @param pitch int ID for a pitch
 	 */
-	public void registerPitch(int badge, int pitch){
-		logger.info("Registering pitch {} to vendor {} for user {}.",pitch,badge,userName);
-		storage.addPitchToVendor(badge, pitch);
+	public void registerPitch(int vendor, int pitch){
+		logger.info("Registering pitch {} to vendor {} for user {}.",pitch,vendor,userName);
+		storage.addPitchToVendor(vendor, pitch);
 	}
 	
 	/**

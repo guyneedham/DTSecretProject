@@ -8,11 +8,11 @@ import java.util.HashMap;
 
 public interface StorageInterface {
 
-	public void addVendor(String firstname, String lastname);
-	public void removeVendor(String firstname, String lastname);
-	public void vendorAddsTransaction(int badgeID, int hubLocation, int totalBought, float totalCash, Date DOT);
-	public int getVendorIDFromName(String firstname, String lastname);
-	public void addPitchToVendor(int badge, int pitch);
+	public void addVendor(String firstname, String lastname); //tested
+	public void removeVendor(String firstname, String lastname); //tested
+	public void vendorAddsTransaction(int venderID, int hubLocation, int totalBought, float totalCash, Date DOT); //tested
+	public int getVendorIDFromName(String firstname, String lastname); //tested
+	public void addPitchToVendor(int badge, int pitch); //tested
 	public ArrayList<Pitch> listOfUnregisteredPitches();
 	public void vendorAddsToSavings(String firstname, String lastname, float moneyIn);
 	public void vendorWithdrawsFromSavings(String firstname, String lastname, float moneyOut);
