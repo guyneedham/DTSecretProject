@@ -13,11 +13,11 @@ public interface StorageInterface {
 	public void vendorAddsTransaction(int badgeID, int hubLocation, int totalBought, float totalCash, Date DOT);
 	public int getVendorIDFromName(String firstname, String lastname);
 	public void addPitchToVendor(int badge, int pitch);
-	public ArrayList<Pitch> listOfUnregisteredPitches(); //arraylist of pitches
+	public ArrayList<Pitch> listOfUnregisteredPitches();
 	public void vendorAddsToSavings(String firstname, String lastname, float moneyIn);
 	public void vendorWithdrawsFromSavings(String firstname, String lastname, float moneyOut);
-	public ArrayList<Pitch> publishBadgeHistory(int badgeID); //arraylist of pitches
-	public ArrayList<Badge> publishVendorHistory(int vendorID); //arraylist of badges
+	public ArrayList<Pitch> publishBadgeHistory(int badgeID); 
+	public ArrayList<Badge> publishVendorHistory(int vendorID);
 	public void newUser(User user);
 	public HashMap<Integer, User> getUser(String userName);
 	public void removeUser(String userName);
@@ -44,5 +44,6 @@ public interface StorageInterface {
 	public void removePitch(int pitchid);
 	public ArrayList<Badge> findBadge(String badgeName);
 	public ArrayList<Tabard> publishTabardHistory(int vendorid);
+	public float getVendorSavings(int vendorid);
 
 }

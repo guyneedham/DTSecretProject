@@ -154,13 +154,13 @@ public class MySQLDatabase implements StorageInterface {
 
 	public void vendorAddsToSavings(String firstname, String lastname,
 			float moneyIn) {
-		//not finished
+		
 		Connection conn = pool.checkOut();
 		try {
 
 			CallableStatement stmt = conn.prepareCall(" Call VendorAddsToSavings(?,?)");
 			stmt.setInt(1, getVendorIDFromName(firstname, lastname));
-			//convert to float at some point
+			stmt.setFloat(2, moneyIn);
 			stmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -686,6 +686,27 @@ public class MySQLDatabase implements StorageInterface {
 			pool.checkIn(conn);
 		}	
 		return tabards;
+	}
+
+	public float getVendorSavings(int vendorid) {
+		Connection conn = pool.checkOut();
+		float floaty = 0;
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL GetVendorSavings(?)");
+
+			stmt.setInt(1, vendorid);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				floaty = rs.getFloat(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
+		return floaty;
 	}
 
 }
