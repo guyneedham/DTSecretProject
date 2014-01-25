@@ -13,11 +13,11 @@ public interface StorageInterface {
 	public void vendorAddsTransaction(int venderID, int hubLocation, int totalBought, float totalCash, Date DOT); //tested
 	public int getVendorIDFromName(String firstname, String lastname); //tested
 	public void addPitchToVendor(int badge, int pitch); //tested
-	public ArrayList<Pitch> listOfUnregisteredPitches();
-	public void vendorAddsToSavings(String firstname, String lastname, float moneyIn);
-	public void vendorWithdrawsFromSavings(String firstname, String lastname, float moneyOut);
-	public ArrayList<Pitch> publishBadgeHistory(int badgeID); 
-	public ArrayList<Badge> publishVendorHistory(int vendorID);
+	public ArrayList<Pitch> listOfUnregisteredPitches(); //tested
+	public void vendorAddsToSavings(String firstname, String lastname, float moneyIn); //tested
+	public void vendorWithdrawsFromSavings(String firstname, String lastname, float moneyOut); //tested
+	public ArrayList<Pitch> publishBadgeHistory(int badgeID);  //tested
+	public ArrayList<Badge> publishVendorHistory(int vendorID); //tested
 	public void newUser(User user);
 	public HashMap<Integer, User> getUser(String userName);
 	public void removeUser(String userName);
@@ -32,7 +32,6 @@ public interface StorageInterface {
 	public ArrayList<Tabard> listAvailableTabards();
 	public String viewTabardStatus(int tabardID);
 	public void addVendorImage(Image image, int vendorID, Date expiry);
-	public void addExpiryToBadge(int badgeID, Date expiry);
 	public VendorBadge getVendorBadge(int badgeID);
 	public ArrayList<Complaint> searchCompByVendor(int vendorID);
 	public ArrayList<Complaint> searchCompByPitch(int pitchID);

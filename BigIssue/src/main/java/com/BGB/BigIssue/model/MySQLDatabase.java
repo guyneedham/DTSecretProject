@@ -158,7 +158,7 @@ public class MySQLDatabase implements StorageInterface {
 		Connection conn = pool.checkOut();
 		try {
 
-			CallableStatement stmt = conn.prepareCall(" Call VendorAddsToSavings(?,?)");
+			CallableStatement stmt = conn.prepareCall("Call VendorAddsToSavings(?,?)");
 			stmt.setInt(1, getVendorIDFromName(firstname, lastname));
 			stmt.setFloat(2, moneyIn);
 			stmt.executeUpdate();
@@ -171,7 +171,18 @@ public class MySQLDatabase implements StorageInterface {
 
 	public void vendorWithdrawsFromSavings(String firstname, String lastname,
 			float moneyOut) {
-		// TODO Auto-generated method stub
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("Call VendorAddsToSavings(?,?)");
+			stmt.setInt(1, getVendorIDFromName(firstname, lastname));
+			stmt.setFloat(2, Float.valueOf("-"+moneyOut));
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
 
 	}
 
@@ -490,12 +501,6 @@ public class MySQLDatabase implements StorageInterface {
 		} finally {
 			pool.checkIn(conn);
 		}
-	}
-
-	public void addExpiryToBadge(int badgeID, Date expiry) {
-		// TODO Auto-generated method stub
-		//not needed
-		return;
 	}
 
 	public ArrayList<Complaint> searchCompByVendor(int vendorID) {
