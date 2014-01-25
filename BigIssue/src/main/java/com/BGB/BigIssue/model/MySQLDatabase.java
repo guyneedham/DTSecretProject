@@ -154,7 +154,7 @@ public class MySQLDatabase implements StorageInterface {
 
 	public void vendorAddsToSavings(String firstname, String lastname,
 			float moneyIn) {
-		
+
 		Connection conn = pool.checkOut();
 		try {
 
@@ -373,32 +373,37 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public int newBadgeIDForVendor(int vendorID) {
-		//not sure
-		/*Connection conn = pool.checkOut();
+		Connection conn = pool.checkOut();
 		int badgeid  = 0;
 		try {
 
-			CallableStatement stmt = conn.prepareCall("CALL AddBadgeToVendor(?,?)");
+			CallableStatement stmt = conn.prepareCall("CALL GetNewBadge(?)");
+			stmt.setInt(1, vendorID);
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
-				Pitch pitch = new Pitch();
-				pitch.setPitchID(rs.getInt(1));
-				pitch.setLocation1(rs.getString(2));
-				pitch.setLocation2(rs.getString(3));
-				pitch.setLocation3(rs.getString(4));
-				pitches.add(pitch);
+				badgeid = rs.getInt(1);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			pool.checkIn(conn);
 		}
-		return pitches;
-		 */return 0;
+		return badgeid;
 	}
 
 	public void badgeIDToBadge(int vendorBadgeID, int badge) {
-		// TODO Auto-generated method stub
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL BadgeIDToBadge(?,?)");
+			stmt.setInt(1, vendorBadgeID);
+			stmt.setInt(2, badge);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
 
 	}
 

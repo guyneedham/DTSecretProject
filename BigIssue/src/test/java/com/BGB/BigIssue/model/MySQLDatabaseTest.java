@@ -116,7 +116,12 @@ public class MySQLDatabaseTest {
 	@Test
 	public void testNewBadge(){
 		db.newBadge("Test", "Test", Date.valueOf("2014-01-01"), Date.valueOf("2014-01-01"));
-		
+	}
+	
+	@Test
+	public void testGetNewBadgeIDForVendor(){
+		int badges = db.newBadgeIDForVendor(5);
+		assertNotEquals(badges,0);
 	}
 	
 }
