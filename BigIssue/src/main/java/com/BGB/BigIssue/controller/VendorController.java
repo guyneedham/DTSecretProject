@@ -33,7 +33,7 @@ public class VendorController {
 		storage.removeVendor(v.getFirstName(), v.getLastName());
 	}
 	
-	public void vendorTransaction(int ID, int hubLocation, int totalBought, DecimalFormat totalCash, Date DOT){
+	public void vendorTransaction(int ID, int hubLocation, int totalBought, Float totalCash, Date DOT){
 		storage.vendorAddsTransaction(ID, hubLocation, totalBought, totalCash, DOT);
 	}
 	
@@ -41,11 +41,11 @@ public class VendorController {
 		return storage.getVendorIDFromName(firstName, lastName);
 	}
 	
-	public void vendorAddsToSavings(String firstname, String lastname, DecimalFormat moneyIn){
+	public void vendorAddsToSavings(String firstname, String lastname, Float moneyIn){
 		storage.vendorAddsToSavings(firstname, lastname, moneyIn);
 	}
 	
-	public void vendorWithdrawsFromSavings(String firstname, String lastname, DecimalFormat moneyOut){
+	public void vendorWithdrawsFromSavings(String firstname, String lastname, Float moneyOut){
 		storage.vendorWithdrawsFromSavings(firstname, lastname, moneyOut);
 	}
 	
