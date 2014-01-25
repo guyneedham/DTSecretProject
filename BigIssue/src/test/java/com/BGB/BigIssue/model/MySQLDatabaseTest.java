@@ -78,10 +78,13 @@ public class MySQLDatabaseTest {
 		assertNotEquals(result, 0);
 	}
 
-	/*@Test
+	@Test
 	public void testVendorAddsTransactionAddsATransactionToDatabase(){
-		db.vendorAddsTransaction(1, 1, 1, 2.0, Date.valueOf("2013-01-01"));
-	}*/
+		db.vendorAddsTransaction(5, 1, 1, (float) 2.00, Date.valueOf("2013-01-01"));
+		Float floar = db.getTotalBoughtForVendor(5);
+		Float five = Float.valueOf("0");
+		assertNotEquals(floar,five);
+	}
 
 	@Test
 	public void testAddPitchToVendor(){
@@ -131,5 +134,16 @@ public class MySQLDatabaseTest {
 		ArrayList<Tabard> tabards = db.publishTabardHistory(5);
 		assertNotEquals(tabards.size(),0);
 	}
+	
+	@Test
+	public void testListAvailableTabards(){
+		ArrayList<Tabard> tabards  = db.listAvailableTabards();
+		assertEquals(tabards.size(),0);
+	}
 
+	@Test
+	public void testViewTabardStatus(){
+		String string= db.viewTabardStatus(1);
+		assertEquals(string,"Taken");
+	}
 }

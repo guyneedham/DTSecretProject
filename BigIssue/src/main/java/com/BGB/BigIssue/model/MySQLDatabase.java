@@ -70,16 +70,17 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public void vendorAddsTransaction(int badgeID, int hubLocation,
-			int totalBought, DecimalFormat totalCash, Date DOT) {
-		//not finished
+			int totalBought, float totalCash, Date DOT) {
+		//tested
 		Connection conn = pool.checkOut();
 		try {
 
-			CallableStatement stmt = conn.prepareCall("Call VendorAddsTransaction(?,?,?,?,?)");
+			CallableStatement stmt = conn.prepareCall("Call AddTransaction(?,?,?,?,?)");
 			stmt.setInt(1, badgeID);
 			stmt.setInt(2, hubLocation);
 			stmt.setInt(3, totalBought);
-			//need to work out decimals
+			stmt.setFloat(4, totalCash);
+			stmt.setDate(5, DOT);
 			stmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -152,7 +153,7 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public void vendorAddsToSavings(String firstname, String lastname,
-			DecimalFormat moneyIn) {
+			float moneyIn) {
 		//not finished
 		Connection conn = pool.checkOut();
 		try {
@@ -169,7 +170,7 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public void vendorWithdrawsFromSavings(String firstname, String lastname,
-			DecimalFormat moneyOut) {
+			float moneyOut) {
 		// TODO Auto-generated method stub
 
 	}
@@ -417,6 +418,7 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public void assignTabardToVendor(int tabardID, int vendorID) {
+		//tested
 		Connection conn = pool.checkOut();
 		try {
 
@@ -432,6 +434,7 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public ArrayList<Tabard> listAvailableTabards() {
+		//tested
 		Connection conn = pool.checkOut();
 		ArrayList<Tabard> tabards = new ArrayList<Tabard>();
 		try {
@@ -454,6 +457,7 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public String viewTabardStatus(int tabardID) {
+		//tested.
 		Connection conn = pool.checkOut();
 		String string =  null;
 		try {
@@ -462,7 +466,7 @@ public class MySQLDatabase implements StorageInterface {
 			stmt.setInt(1, tabardID);
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
-				string = rs.getString(0);
+				string = rs.getString(1);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -573,9 +577,9 @@ public class MySQLDatabase implements StorageInterface {
 		return null;
 	}
 
-	public double getTotalBoughtForVendor(int vendor) {
+	public float getTotalBoughtForVendor(int vendor) {
 		Connection conn = pool.checkOut();
-		double total = 0;
+		float total = 0;
 		try {
 
 			CallableStatement stmt = conn.prepareCall("CALL GetVendorTransactionsTotal(?)");
@@ -583,7 +587,7 @@ public class MySQLDatabase implements StorageInterface {
 			stmt.setInt(1, vendor);
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
-				total = rs.getDouble(1);	
+				total = rs.getFloat(1);	
 			}
 
 		} catch (SQLException e) {
