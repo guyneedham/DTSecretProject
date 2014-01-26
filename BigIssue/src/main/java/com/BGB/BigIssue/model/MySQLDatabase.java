@@ -236,8 +236,26 @@ public class MySQLDatabase implements StorageInterface {
 
 
 	public VendorBadge getVendorBadge(int badgeID) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = pool.checkOut();
+		VendorBadge vbadge = new VendorBadge();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL GetVendorBadgeInfo(?)");
+
+			stmt.setInt(1, badgeID);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				vbadge.setProfilePic((Image) rs.getBlob(1));
+				vbadge.setExpire(rs.getDate(2));
+				vbadge.setBadgeID(rs.getInt(3));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
+		return vbadge;
 	}
 
 	public int getTotalBoughtForVendor(int vendor) {
