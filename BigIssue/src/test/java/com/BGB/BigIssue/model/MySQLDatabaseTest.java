@@ -213,7 +213,7 @@ public class MySQLDatabaseTest {
 	public void testPublishTabardHistory(){
 		db.assignTabardToVendor(1, 5);
 		ArrayList<Tabard> tabards = db.publishTabardHistory(5);
-		assertEquals(tabards.get(0).getID(),1S);
+		assertEquals(tabards.get(0).getID(),1);
 		
 	}
 	

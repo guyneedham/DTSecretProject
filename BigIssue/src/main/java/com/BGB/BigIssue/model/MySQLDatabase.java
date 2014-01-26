@@ -586,7 +586,7 @@ public class MySQLDatabase implements StorageInterface {
 		Connection conn = pool.checkOut();
 		try {
 
-			CallableStatement stmt = conn.prepareCall("CALL GetVendorTransactionsTotal(?)");
+			CallableStatement stmt = conn.prepareCall("CALL BanVendor(?,?,?)");
 
 			stmt.setInt(1, vendor);
 			stmt.setInt(2, pitch);
