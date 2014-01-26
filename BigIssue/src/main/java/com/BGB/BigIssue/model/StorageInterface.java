@@ -41,8 +41,10 @@ public interface StorageInterface {
 	public int getTotalBoughtForVendor(int vendor); //tested
 	public void addPitch(String location1, String location2, String location3);
 	public void removePitch(int pitchid); //tested
-	public ArrayList<Badge> findBadge(String badgeName);
-	public ArrayList<Tabard> publishTabardHistory(int vendorid);
-	public float getVendorSavings(int vendorid);
+	public ArrayList<Badge> findBadge(String badgeName); //tested
+	public ArrayList<Tabard> publishTabardHistory(int vendorid); //tested
+	public float getVendorSavings(int vendorid); //tested
+	public void removeComplaint(int complaintID);
+	public void unbanVendorFromPitch(int vendorid, int pitchid);
 
 }

@@ -760,4 +760,39 @@ public class MySQLDatabase implements StorageInterface {
 		return pitches;
 	}
 
+	public void removeComplaint(int complaintID) {
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL RemoveComplaint(?)");
+
+			stmt.setInt(1, complaintID);
+			stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
+
+	}
+
+	public void unbanVendorFromPitch(int vendorid, int pitchid) {
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL UnbanVendor(?,?)");
+
+			stmt.setInt(1, vendorid);
+			stmt.setInt(2, pitchid);
+			stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
+
+	}
+
 }
