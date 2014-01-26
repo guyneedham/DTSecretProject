@@ -795,4 +795,22 @@ public class MySQLDatabase implements StorageInterface {
 
 	}
 
+	public void removeBadge(String badgeName) {
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL RemoveBadge(?)");
+
+			stmt.setString(1, badgeName);
+			stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
+
+		
+	}
+
 }

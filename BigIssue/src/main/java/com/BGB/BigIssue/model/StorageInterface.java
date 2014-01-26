@@ -46,5 +46,6 @@ public interface StorageInterface {
 	public float getVendorSavings(int vendorid); //tested
 	public void removeComplaint(int complaintID);
 	public void unbanVendorFromPitch(int vendorid, int pitchid);
+	public void removeBadge(String badgeName);
 
 }
