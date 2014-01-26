@@ -519,9 +519,11 @@ public class MySQLDatabase implements StorageInterface {
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
 				Complaint complaint = new Complaint();
-				complaint.setVendorID(rs.getInt(1));
-				complaint.setCompDate(rs.getDate(2));
-				complaint.setComplaint(rs.getString(3));
+				complaint.setComplaintID(rs.getInt(1));
+				complaint.setVendorID(rs.getInt(2));
+				complaint.setPitchID(rs.getInt(3));
+				complaint.setCompDate(rs.getDate(4));
+				complaint.setComplaint(rs.getString(5));
 				complaints.add(complaint);
 			}
 		} catch (SQLException e) {
@@ -542,9 +544,12 @@ public class MySQLDatabase implements StorageInterface {
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
 				Complaint complaint = new Complaint();
-				complaint.setVendorID(rs.getInt(1));
-				complaint.setCompDate(rs.getDate(2));
-				complaint.setComplaint(rs.getString(3));
+				complaint.setComplaintID(rs.getInt(1));
+				complaint.setVendorID(rs.getInt(2));
+				complaint.setPitchID(rs.getInt(3));
+				complaint.setCompDate(rs.getDate(4));
+				complaint.setComplaint(rs.getString(5));
+				
 				complaints.add(complaint);
 			}
 		} catch (SQLException e) {
@@ -555,15 +560,15 @@ public class MySQLDatabase implements StorageInterface {
 		return complaints;
 	}
 
-	public void addComplaint(int pitchID, int vendorID, Date date,
+	public void addComplaint(int vendorID, int pitchID, Date date,
 			String complaint) {
 		Connection conn = pool.checkOut();
 		try {
 
 			CallableStatement stmt = conn.prepareCall("CALL AddComplaint(?,?,?,?)");
 
-			stmt.setInt(1, pitchID);
-			stmt.setInt(2, vendorID);
+			stmt.setInt(1, vendorID);
+			stmt.setInt(2, pitchID);
 			stmt.setDate(3, date);
 			stmt.setString(4, complaint);
 

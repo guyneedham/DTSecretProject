@@ -34,7 +34,7 @@ public interface StorageInterface {
 	public VendorBadge getVendorBadge(int badgeID);
 	public ArrayList<Complaint> searchCompByVendor(int vendorID); //tested
 	public ArrayList<Complaint> searchCompByPitch(int pitchID); //tested
-	public void addComplaint(int pitchID, int vendorID, Date date,
+	public void addComplaint(int vendorID, int pitchID, Date date,
 			String complaint); //tested
 	public void banVendorFromPitch(int vendor, int pitch, Date date); //tested
 	public ArrayList<Pitch> viewVendorsBannedPitches(int vendorID); //tested

@@ -3,6 +3,7 @@ package com.BGB.BigIssue.controller;
 import static org.junit.Assert.*;
 
 import com.BGB.BigIssue.controller.UserController;
+import com.BGB.BigIssue.model.MySQLDatabase;
 import com.BGB.BigIssue.model.SHA1Encryption;
 import com.BGB.BigIssue.model.TempMySQLDB;
 import com.BGB.BigIssue.model.User;
@@ -14,7 +15,7 @@ import org.junit.Test;
 public class UserControllerTest {
 
 	private UserController uc;
-	private TempMySQLDB db;
+	private MySQLDatabase db;
 	private UserFactory uf;
 	private String userName;
 	private String password;
