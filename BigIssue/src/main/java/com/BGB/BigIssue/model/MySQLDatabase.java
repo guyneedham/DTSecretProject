@@ -32,10 +32,11 @@ public class MySQLDatabase implements StorageInterface {
 		this.bf = bf;
 	}
 
+
+	//vendor section
+
 	public void addVendor(String firstname, String lastname) {
 		Connection conn = pool.checkOut();
-		//tested
-
 		try {
 
 			CallableStatement stmt = conn.prepareCall("Call AddVendor(?,?)");
@@ -50,8 +51,7 @@ public class MySQLDatabase implements StorageInterface {
 
 	}
 
-	public void removeVendor(String firstname, String lastname) {
-		//tested
+	public void removeVendor(String firstname, String lastname){
 		Connection conn = pool.checkOut();
 
 		try {
@@ -91,7 +91,6 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public int getVendorIDFromName(String firstname, String lastname) {
-		//tested
 		Connection conn = pool.checkOut();
 		int vid = 0;
 		try {
@@ -111,6 +110,223 @@ public class MySQLDatabase implements StorageInterface {
 		}
 		return vid;
 	}
+
+
+	public void vendorAddsToSavings(String firstname, String lastname,
+			float moneyIn) {
+
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("Call VendorAddsToSavings(?,?)");
+			stmt.setInt(1, getVendorIDFromName(firstname, lastname));
+			stmt.setFloat(2, moneyIn);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
+	}
+
+	public void vendorWithdrawsFromSavings(String firstname, String lastname,
+			float moneyOut) {
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("Call VendorAddsToSavings(?,?)");
+			stmt.setInt(1, getVendorIDFromName(firstname, lastname));
+			stmt.setFloat(2, Float.valueOf("-"+moneyOut));
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
+
+	}
+
+	public ArrayList<Badge> publishVendorHistory(int vendorID) {
+		//tested
+		Connection conn = pool.checkOut();
+		ArrayList<Badge> badges = new ArrayList<Badge>();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL PublishVendorHistory(?)");
+			stmt.setInt(1, vendorID);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				Badge badge = new Badge();
+				badge.setBadgeID(rs.getInt(1));
+				badge.setName(rs.getString(2));
+				badge.setColour(rs.getString(3));
+				badge.setStart(rs.getDate(4));
+				badge.setEnd(rs.getDate(5));
+				badges.add(badge);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
+		return badges;
+	}
+
+	public Vendor getVendor(int iD) {
+		//tested
+		Connection conn = pool.checkOut();
+		Vendor vendor = null;
+
+		try {
+
+			CallableStatement stmt = conn.prepareCall("Call GetVendor(?)");
+			stmt.setInt(1, iD);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				vendor = new Vendor();
+				vendor.setVendorID(rs.getInt(1));
+				vendor.setFirstName(rs.getString(2));
+				vendor.setLastName(rs.getString(3));
+				vendor.setSavingsTotal(rs.getInt(4));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
+
+		return vendor;
+	}
+
+	public void addVendorImage(Image image, int vendorID, Date expiry) {
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL AddVendorImage(?,?,?)");
+			stmt.setBlob(1, (Blob) image);
+			stmt.setInt(2, vendorID);
+			stmt.setDate(3, expiry);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}
+	}
+
+	public void banVendorFromPitch(int vendor, int pitch, Date date) {
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL BanVendor(?,?,?)");
+
+			stmt.setInt(1, vendor);
+			stmt.setInt(2, pitch);
+			stmt.setDate(3, date);
+			stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
+
+	}
+
+
+	public VendorBadge getVendorBadge(int badgeID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getTotalBoughtForVendor(int vendor) {
+		Connection conn = pool.checkOut();
+		int total = 0;
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL GetVendorTransactionsTotal(?)");
+
+			stmt.setInt(1, vendor);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				total = rs.getInt(1);	
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
+		return total;
+	}
+
+	public float getVendorSavings(int vendorid) {
+		Connection conn = pool.checkOut();
+		float floaty = 0;
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL GetVendorSavings(?)");
+
+			stmt.setInt(1, vendorid);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				floaty = rs.getFloat(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
+		return floaty;
+	}
+
+	public ArrayList<Pitch> viewVendorsBannedPitches(int vendorID) {
+		Connection conn = pool.checkOut();
+		ArrayList<Pitch> pitches = new ArrayList<Pitch>();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL ViewVendorsBannedPitches(?)");
+
+			stmt.setInt(1, vendorID);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				Pitch pitch = new Pitch();
+				pitch.setPitchID(rs.getInt(1));
+				pitch.setLocation1(rs.getString(2));
+				pitch.setLocation2(rs.getString(3));
+				pitch.setLocation3(rs.getString(4));
+				pitches.add(pitch);				
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
+		return pitches;
+	}
+
+	public void unbanVendorFromPitch(int vendorid, int pitchid) {
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL UnbanVendor(?,?)");
+
+			stmt.setInt(1, vendorid);
+			stmt.setInt(2, pitchid);
+			stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
+
+	}
+
+	//Pitch section
 
 	public void addPitchToVendor(int badge, int pitch) {
 		//tested
@@ -152,40 +368,6 @@ public class MySQLDatabase implements StorageInterface {
 		return pitches;
 	}
 
-	public void vendorAddsToSavings(String firstname, String lastname,
-			float moneyIn) {
-
-		Connection conn = pool.checkOut();
-		try {
-
-			CallableStatement stmt = conn.prepareCall("Call VendorAddsToSavings(?,?)");
-			stmt.setInt(1, getVendorIDFromName(firstname, lastname));
-			stmt.setFloat(2, moneyIn);
-			stmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			pool.checkIn(conn);
-		}
-	}
-
-	public void vendorWithdrawsFromSavings(String firstname, String lastname,
-			float moneyOut) {
-		Connection conn = pool.checkOut();
-		try {
-
-			CallableStatement stmt = conn.prepareCall("Call VendorAddsToSavings(?,?)");
-			stmt.setInt(1, getVendorIDFromName(firstname, lastname));
-			stmt.setFloat(2, Float.valueOf("-"+moneyOut));
-			stmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			pool.checkIn(conn);
-		}
-
-	}
-
 	public ArrayList<Pitch> publishBadgeHistory(int badgeID) {
 		//tested
 		Connection conn = pool.checkOut();
@@ -211,31 +393,46 @@ public class MySQLDatabase implements StorageInterface {
 		return pitches;
 	}
 
-	public ArrayList<Badge> publishVendorHistory(int vendorID) {
+	public void addPitch(String location1, String location2, String location3) {
 		//tested
 		Connection conn = pool.checkOut();
-		ArrayList<Badge> badges = new ArrayList<Badge>();
 		try {
 
-			CallableStatement stmt = conn.prepareCall("CALL PublishVendorHistory(?)");
-			stmt.setInt(1, vendorID);
-			ResultSet rs = stmt.executeQuery();
-			while(rs.next()){
-				Badge badge = new Badge();
-				badge.setBadgeID(rs.getInt(1));
-				badge.setName(rs.getString(2));
-				badge.setColour(rs.getString(3));
-				badge.setStart(rs.getDate(4));
-				badge.setEnd(rs.getDate(5));
-				badges.add(badge);
-			}
+			CallableStatement stmt = conn.prepareCall("CALL AddPitch(?,?,?)");
+
+			stmt.setString(1, location1);
+			stmt.setString(2, location2);
+			stmt.setString(3, location3);
+
+			stmt.executeUpdate();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			pool.checkIn(conn);
-		}
-		return badges;
+		}	
+
 	}
+
+	public void removePitch(int pitchid) {
+		//works
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL RemovePitch(?)");
+
+			stmt.setInt(1, pitchid);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
+	}
+
+
+
+	//user section
 
 	public void newUser(User user) {
 		Connection conn = pool.checkOut();
@@ -354,6 +551,10 @@ public class MySQLDatabase implements StorageInterface {
 
 	}
 
+
+	//badge section
+
+
 	public void newBadge(String name, String colour, Date start, Date end) {
 		//tested
 		Connection conn = pool.checkOut();
@@ -407,32 +608,53 @@ public class MySQLDatabase implements StorageInterface {
 
 	}
 
-	public Vendor getVendor(int iD) {
+	public ArrayList<Badge> findBadge(String badgeName) {
 		//tested
 		Connection conn = pool.checkOut();
-		Vendor vendor = null;
-
+		ArrayList<Badge> badges = new ArrayList<Badge>();
 		try {
 
-			CallableStatement stmt = conn.prepareCall("Call GetVendor(?)");
-			stmt.setInt(1, iD);
+			CallableStatement stmt = conn.prepareCall("CALL FindBadge(?)");
+
+			stmt.setString(1, badgeName);
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
-				vendor = new Vendor();
-				vendor.setVendorID(rs.getInt(1));
-				vendor.setFirstName(rs.getString(2));
-				vendor.setLastName(rs.getString(3));
-				vendor.setSavingsTotal(rs.getInt(4));
+				Badge badge = new Badge();
+				badge.setBadgeID(rs.getInt(1));
+				badge.setName(rs.getString(2));
+				badge.setColour(rs.getString(3));
+				badge.setStart(rs.getDate(4));
+				badge.setEnd(rs.getDate(5));
+				badges.add(badge);	
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			pool.checkIn(conn);
-		}
-
-		return vendor;
+		}	
+		return badges;
 	}
+
+	public void removeBadge(String badgeName) {
+		Connection conn = pool.checkOut();
+		try {
+
+			CallableStatement stmt = conn.prepareCall("CALL RemoveBadge(?)");
+
+			stmt.setString(1, badgeName);
+			stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.checkIn(conn);
+		}	
+
+
+	}
+
+	//tabard
 
 	public void assignTabardToVendor(int tabardID, int vendorID) {
 		//tested
@@ -493,21 +715,34 @@ public class MySQLDatabase implements StorageInterface {
 		return string;
 	}
 
-	public void addVendorImage(Image image, int vendorID, Date expiry) {
+
+	public ArrayList<Tabard> publishTabardHistory(int vendorid) {
+		//tested
 		Connection conn = pool.checkOut();
+		ArrayList<Tabard> tabards = new ArrayList<Tabard>();
 		try {
 
-			CallableStatement stmt = conn.prepareCall("CALL AddVendorImage(?,?,?)");
-			stmt.setBlob(1, (Blob) image);
-			stmt.setInt(2, vendorID);
-			stmt.setDate(3, expiry);
+			CallableStatement stmt = conn.prepareCall("CALL PublishTabardHistory(?)");
+
+			stmt.setInt(1, vendorid);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				Tabard tabard = new Tabard();
+				tabard.setID(rs.getInt(1));
+				tabard.setStatus(rs.getString(2));
+				tabards.add(tabard);
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			pool.checkIn(conn);
-		}
+		}	
+		return tabards;
 	}
+
+
+	//complaints
 
 	public ArrayList<Complaint> searchCompByVendor(int vendorID) {
 		Connection conn = pool.checkOut();
@@ -549,7 +784,7 @@ public class MySQLDatabase implements StorageInterface {
 				complaint.setPitchID(rs.getInt(3));
 				complaint.setCompDate(rs.getDate(4));
 				complaint.setComplaint(rs.getString(5));
-				
+
 				complaints.add(complaint);
 			}
 		} catch (SQLException e) {
@@ -582,188 +817,6 @@ public class MySQLDatabase implements StorageInterface {
 
 	}
 
-	public void banVendorFromPitch(int vendor, int pitch, Date date) {
-		Connection conn = pool.checkOut();
-		try {
-
-			CallableStatement stmt = conn.prepareCall("CALL BanVendor(?,?,?)");
-
-			stmt.setInt(1, vendor);
-			stmt.setInt(2, pitch);
-			stmt.setDate(3, date);
-			stmt.executeUpdate();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			pool.checkIn(conn);
-		}	
-
-	}
-
-
-	public VendorBadge getVendorBadge(int badgeID) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public int getTotalBoughtForVendor(int vendor) {
-		Connection conn = pool.checkOut();
-		int total = 0;
-		try {
-
-			CallableStatement stmt = conn.prepareCall("CALL GetVendorTransactionsTotal(?)");
-
-			stmt.setInt(1, vendor);
-			ResultSet rs = stmt.executeQuery();
-			while(rs.next()){
-				total = rs.getInt(1);	
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			pool.checkIn(conn);
-		}	
-		return total;
-	}
-
-	public void addPitch(String location1, String location2, String location3) {
-		//tested
-		Connection conn = pool.checkOut();
-		try {
-
-			CallableStatement stmt = conn.prepareCall("CALL AddPitch(?,?,?)");
-
-			stmt.setString(1, location1);
-			stmt.setString(2, location2);
-			stmt.setString(3, location3);
-
-			stmt.executeUpdate();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			pool.checkIn(conn);
-		}	
-
-	}
-
-	public void removePitch(int pitchid) {
-		//works
-		Connection conn = pool.checkOut();
-		try {
-
-			CallableStatement stmt = conn.prepareCall("CALL RemovePitch(?)");
-
-			stmt.setInt(1, pitchid);
-			stmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			pool.checkIn(conn);
-		}	
-	}
-
-	public ArrayList<Badge> findBadge(String badgeName) {
-		//tested
-		Connection conn = pool.checkOut();
-		ArrayList<Badge> badges = new ArrayList<Badge>();
-		try {
-
-			CallableStatement stmt = conn.prepareCall("CALL FindBadge(?)");
-
-			stmt.setString(1, badgeName);
-			ResultSet rs = stmt.executeQuery();
-			while(rs.next()){
-				Badge badge = new Badge();
-				badge.setBadgeID(rs.getInt(1));
-				badge.setName(rs.getString(2));
-				badge.setColour(rs.getString(3));
-				badge.setStart(rs.getDate(4));
-				badge.setEnd(rs.getDate(5));
-				badges.add(badge);	
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			pool.checkIn(conn);
-		}	
-		return badges;
-	}
-
-	public ArrayList<Tabard> publishTabardHistory(int vendorid) {
-		//tested
-		Connection conn = pool.checkOut();
-		ArrayList<Tabard> tabards = new ArrayList<Tabard>();
-		try {
-
-			CallableStatement stmt = conn.prepareCall("CALL PublishTabardHistory(?)");
-
-			stmt.setInt(1, vendorid);
-			ResultSet rs = stmt.executeQuery();
-			while(rs.next()){
-				Tabard tabard = new Tabard();
-				tabard.setID(rs.getInt(1));
-				tabard.setStatus(rs.getString(2));
-				tabards.add(tabard);
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			pool.checkIn(conn);
-		}	
-		return tabards;
-	}
-
-	public float getVendorSavings(int vendorid) {
-		Connection conn = pool.checkOut();
-		float floaty = 0;
-		try {
-
-			CallableStatement stmt = conn.prepareCall("CALL GetVendorSavings(?)");
-
-			stmt.setInt(1, vendorid);
-			ResultSet rs = stmt.executeQuery();
-			while(rs.next()){
-				floaty = rs.getFloat(1);
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			pool.checkIn(conn);
-		}	
-		return floaty;
-	}
-
-	public ArrayList<Pitch> viewVendorsBannedPitches(int vendorID) {
-		Connection conn = pool.checkOut();
-		ArrayList<Pitch> pitches = new ArrayList<Pitch>();
-		try {
-
-			CallableStatement stmt = conn.prepareCall("CALL ViewVendorsBannedPitches(?)");
-
-			stmt.setInt(1, vendorID);
-			ResultSet rs = stmt.executeQuery();
-			while(rs.next()){
-				Pitch pitch = new Pitch();
-				pitch.setPitchID(rs.getInt(1));
-				pitch.setLocation1(rs.getString(2));
-				pitch.setLocation2(rs.getString(3));
-				pitch.setLocation3(rs.getString(4));
-				pitches.add(pitch);				
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			pool.checkIn(conn);
-		}	
-		return pitches;
-	}
 
 	public void removeComplaint(int complaintID) {
 		Connection conn = pool.checkOut();
@@ -780,42 +833,6 @@ public class MySQLDatabase implements StorageInterface {
 			pool.checkIn(conn);
 		}	
 
-	}
-
-	public void unbanVendorFromPitch(int vendorid, int pitchid) {
-		Connection conn = pool.checkOut();
-		try {
-
-			CallableStatement stmt = conn.prepareCall("CALL UnbanVendor(?,?)");
-
-			stmt.setInt(1, vendorid);
-			stmt.setInt(2, pitchid);
-			stmt.executeUpdate();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			pool.checkIn(conn);
-		}	
-
-	}
-
-	public void removeBadge(String badgeName) {
-		Connection conn = pool.checkOut();
-		try {
-
-			CallableStatement stmt = conn.prepareCall("CALL RemoveBadge(?)");
-
-			stmt.setString(1, badgeName);
-			stmt.executeUpdate();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			pool.checkIn(conn);
-		}	
-
-		
 	}
 
 }

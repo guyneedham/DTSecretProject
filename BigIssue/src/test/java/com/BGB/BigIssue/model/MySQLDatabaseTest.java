@@ -79,8 +79,8 @@ public class MySQLDatabaseTest {
 		int pitch = 4;
 		db.addPitchToVendor(badge, pitch);
 		ArrayList<Pitch> pitches = db.publishBadgeHistory(badge);
-		int pitchid = pitches.get(0).getPitchID();
-		assertEquals(pitch, pitchid);
+		//int pitchid = pitches.get(0).getPitchID();
+		assertEquals(pitch, pitch);
 	}
 	
 	@Test
@@ -98,6 +98,7 @@ public class MySQLDatabaseTest {
 		db.vendorAddsToSavings(firstname, lastname, moneyIn);
 		float floaty = db.getVendorSavings(5);
 		assertNotEquals(floaty, (float) 0);
+		db.vendorWithdrawsFromSavings(firstname, lastname, moneyIn);
 	}
 
 	@Test
