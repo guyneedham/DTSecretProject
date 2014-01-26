@@ -422,6 +422,7 @@ public class MySQLDatabase implements StorageInterface {
 				vendor.setVendorID(rs.getInt(1));
 				vendor.setFirstName(rs.getString(2));
 				vendor.setLastName(rs.getString(3));
+				vendor.setSavingsTotal(rs.getInt(4));
 			}
 
 		} catch (SQLException e) {
@@ -601,9 +602,9 @@ public class MySQLDatabase implements StorageInterface {
 		return null;
 	}
 
-	public float getTotalBoughtForVendor(int vendor) {
+	public int getTotalBoughtForVendor(int vendor) {
 		Connection conn = pool.checkOut();
-		float total = 0;
+		int total = 0;
 		try {
 
 			CallableStatement stmt = conn.prepareCall("CALL GetVendorTransactionsTotal(?)");
@@ -611,7 +612,7 @@ public class MySQLDatabase implements StorageInterface {
 			stmt.setInt(1, vendor);
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
-				total = rs.getFloat(1);	
+				total = rs.getInt(1);	
 			}
 
 		} catch (SQLException e) {

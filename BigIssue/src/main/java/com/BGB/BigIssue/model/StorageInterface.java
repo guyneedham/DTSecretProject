@@ -2,7 +2,6 @@ package com.BGB.BigIssue.model;
 
 import java.awt.Image;
 import java.sql.Date;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,22 +25,22 @@ public interface StorageInterface {
 	public void changeStoragePassword(String userName, String pass); //change the database password
 	public void newBadge(String name, String colour, Date start, Date end); //tested
 	public int newBadgeIDForVendor(int vendorID); //tested
-	public void badgeIDToBadge(int vendorBadgeID, int badge);
-	public Vendor getVendor(int iD);
-	public void assignTabardToVendor(int tabardID, int vendorID);
+	public void badgeIDToBadge(int vendorBadgeID, int badge); //tested
+	public Vendor getVendor(int iD); //tested
+	public void assignTabardToVendor(int tabardID, int vendorID); //tested
 	public ArrayList<Tabard> listAvailableTabards();
-	public String viewTabardStatus(int tabardID);
+	public String viewTabardStatus(int tabardID); //tested
 	public void addVendorImage(Image image, int vendorID, Date expiry);
 	public VendorBadge getVendorBadge(int badgeID);
-	public ArrayList<Complaint> searchCompByVendor(int vendorID);
-	public ArrayList<Complaint> searchCompByPitch(int pitchID);
+	public ArrayList<Complaint> searchCompByVendor(int vendorID); //tested
+	public ArrayList<Complaint> searchCompByPitch(int pitchID); //tested
 	public void addComplaint(int pitchID, int vendorID, Date date,
-			String complaint);
-	public void banVendorFromPitch(int vendor, int pitch, Date date);
-	public ArrayList<Pitch> viewVendorsBannedPitches(int vendorID);
-	public float getTotalBoughtForVendor(int vendor);
+			String complaint); //tested
+	public void banVendorFromPitch(int vendor, int pitch, Date date); //tested
+	public ArrayList<Pitch> viewVendorsBannedPitches(int vendorID); //tested
+	public int getTotalBoughtForVendor(int vendor); //tested
 	public void addPitch(String location1, String location2, String location3);
-	public void removePitch(int pitchid);
+	public void removePitch(int pitchid); //tested
 	public ArrayList<Badge> findBadge(String badgeName);
 	public ArrayList<Tabard> publishTabardHistory(int vendorid);
 	public float getVendorSavings(int vendorid);
