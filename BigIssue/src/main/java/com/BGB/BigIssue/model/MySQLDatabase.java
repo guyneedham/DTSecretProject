@@ -35,7 +35,7 @@ public class MySQLDatabase implements StorageInterface {
 
 	//vendor section
 
-	public void addVendor(String firstname, String lastname) {
+	public void addVendor(String firstname, String lastname) { //sp
 		Connection conn = pool.checkOut();
 		try {
 
@@ -51,7 +51,7 @@ public class MySQLDatabase implements StorageInterface {
 
 	}
 
-	public void removeVendor(String firstname, String lastname){
+	public void removeVendor(String firstname, String lastname){ //sp
 		Connection conn = pool.checkOut();
 
 		try {
@@ -70,8 +70,7 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public void vendorAddsTransaction(int badgeID, int hubLocation,
-			int totalBought, float totalCash, Date DOT) {
-		//tested
+			int totalBought, float totalCash, Date DOT) { //sp
 		Connection conn = pool.checkOut();
 		try {
 
@@ -90,7 +89,7 @@ public class MySQLDatabase implements StorageInterface {
 
 	}
 
-	public int getVendorIDFromName(String firstname, String lastname) {
+	public int getVendorIDFromName(String firstname, String lastname) { //sp
 		Connection conn = pool.checkOut();
 		int vid = 0;
 		try {
@@ -111,14 +110,13 @@ public class MySQLDatabase implements StorageInterface {
 		return vid;
 	}
 
-
 	public void vendorAddsToSavings(String firstname, String lastname,
 			float moneyIn) {
 
 		Connection conn = pool.checkOut();
 		try {
 
-			CallableStatement stmt = conn.prepareCall("Call VendorAddsToSavings(?,?)");
+			CallableStatement stmt = conn.prepareCall("Call VendorAddsToSavings(?,?,?)");
 			stmt.setInt(1, getVendorIDFromName(firstname, lastname));
 			stmt.setFloat(2, moneyIn);
 			stmt.executeUpdate();
@@ -147,7 +145,6 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public ArrayList<Badge> publishVendorHistory(int vendorID) {
-		//tested
 		Connection conn = pool.checkOut();
 		ArrayList<Badge> badges = new ArrayList<Badge>();
 		try {
@@ -173,7 +170,6 @@ public class MySQLDatabase implements StorageInterface {
 	}
 
 	public Vendor getVendor(int iD) {
-		//tested
 		Connection conn = pool.checkOut();
 		Vendor vendor = null;
 
@@ -530,7 +526,7 @@ public class MySQLDatabase implements StorageInterface {
 		Connection conn = pool.checkOut();
 		try {
 
-			CallableStatement stmt = conn.prepareCall("CALL ChangePassword(?)");
+			CallableStatement stmt = conn.prepareCall("CALL ChangePassword(?,?)");
 			stmt.setString(1, userName);
 			stmt.setBytes(2, password);
 			stmt.executeUpdate();
